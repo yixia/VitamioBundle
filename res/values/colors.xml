@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<resources>
+    <color name="gray">#FF777777</color>
+    <color name="transparent">#00000000</color>
+    <color name="overlay_background">#FFFFFFFF</color>
+    <color name="mediacontroller_bg_pressed">#ff53c1bd</color>
+    <color name="mediacontroller_bg">#99000000</color>
+    <color name="mediacontroller_seekbar_normal">#ff53c1bd</color>
+    <color name="mediacontroller_seekbar_pressed">#ff53c1bd</color>
+    <color name="mediacontroller_seekbar_stroke">#aaaaaa</color>
+    <color name="mediacontroller_seekbar_bg">#11ffffff</color>
+</resources>

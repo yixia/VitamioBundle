@@ -40,6 +40,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -61,6 +62,7 @@ import android.view.ViewGroup.LayoutParams;
  */
 public class VideoView extends SurfaceView implements MediaController.MediaPlayerControl {
 	private Uri mUri;
+	private String mVideoTitle;
 	private long mDuration;
 
 	private static final int STATE_ERROR = -1;
@@ -195,6 +197,10 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 		requestLayout();
 		invalidate();
 	}
+	
+	public void setVideoTitle(String title) {
+		mVideoTitle = title;
+	}
 
 	public void stopPlayback() {
 		if (mMediaPlayer != null) {
@@ -261,12 +267,17 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 			View anchorView = this.getParent() instanceof View ? (View) this.getParent() : this;
 			mMediaController.setAnchorView(anchorView);
 			mMediaController.setEnabled(isInPlaybackState());
-
-			if (mUri != null) {
-				List<String> paths = mUri.getPathSegments();
-				String name = paths == null || paths.isEmpty() ? "null" : paths.get(paths.size() - 1);
-				mMediaController.setFileName(name);
+			
+			if (TextUtils.isEmpty(mVideoTitle)) {
+				if (mUri != null) {
+					List<String> paths = mUri.getPathSegments();
+					String name = paths == null || paths.isEmpty() ? "null" : paths.get(paths.size() - 1);
+					mMediaController.setFileName(name);
+				}
+			} else {
+				mMediaController.setFileName(mVideoTitle);
 			}
+			
 		}
 	}
 

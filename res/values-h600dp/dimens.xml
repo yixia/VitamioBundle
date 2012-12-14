@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <dimen name="mediacontroller_buttons_top_margin">8dp</dimen>
+    <dimen name="mediacontroller_buttons_bottom_margin">2dp</dimen>
+
+</resources>

@@ -20,6 +20,8 @@ package io.vov.vitamio.widget;
 import io.vov.utils.Log;
 import io.vov.utils.StringUtils;
 import io.vov.vitamio.R;
+import io.vov.vitamio.widget.OutlineTextView;
+
 import android.content.Context;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -421,9 +423,9 @@ public class MediaController extends FrameLayout {
 			return;
 
 		if (mPlayer.isPlaying())
-			mPauseButton.setImageResource(R.drawable.mediacontroller_pause_button);
+			mPauseButton.setImageResource(R.drawable.mediacontroller_pause);
 		else
-			mPauseButton.setImageResource(R.drawable.mediacontroller_play_button);
+			mPauseButton.setImageResource(R.drawable.mediacontroller_play);
 	}
 
 	private void doPauseResume() {

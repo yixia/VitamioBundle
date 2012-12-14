@@ -4,12 +4,13 @@
     android:versionName="3.0" >
 
     <uses-sdk
-        android:minSdkVersion="7"
-        android:targetSdkVersion="16" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/vitamio_name" >
+        android:label="@string/vitamio_name" 
+        android:debuggable="true">
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
