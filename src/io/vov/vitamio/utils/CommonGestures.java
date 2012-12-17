@@ -1,4 +1,4 @@
-package io.vov.vitamio.widget;
+package io.vov.vitamio.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,8 +6,6 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-
-import io.vov.vitamio.utils.DeviceUtils;
 
 public class CommonGestures {
 	public static final int SCALE_STATE_BEGIN = 0;
@@ -73,7 +71,7 @@ public class CommonGestures {
 	}
 
 	@SuppressLint("NewApi")
-  private class ScaleDetectorListener implements ScaleGestureDetector.OnScaleGestureListener {
+	private class ScaleDetectorListener implements ScaleGestureDetector.OnScaleGestureListener {
 		@Override
 		public boolean onScale(ScaleGestureDetector detector) {
 			if (mListener != null && mGestureEnabled)

@@ -8,15 +8,32 @@
         android:targetSdkVersion="17" />
 
     <application
+        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/vitamio_name" 
-        android:debuggable="true">
+        android:label="@string/vitamio_name" >
         <activity
             android:name="io.vov.vitamio.activity.InitActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name="io.vov.vitamio.activity.VideoActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:process=":vplayer"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name="io.vov.vitamio.activity.InitActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <service
+            android:name="io.vov.vitamio.activity.PlayerService"
+            android:process=":vplayer" />
     </application>
 
 </manifest>

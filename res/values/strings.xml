@@ -10,7 +10,7 @@
     <string name="vitamio_videoview_error_button">OK</string>
     <string name="mediacontroller_play_pause">Play/Pause</string>
     
-    <string name="video_layout_loading">Loadin&#8230;</string>
+    <string name="video_layout_loading">Loading&#8230;</string>
     <string name="video_original">100%</string>
     <string name="video_fit_screen">FIT SCREEN</string>
     <string name="video_stretch">STRETCH</string>
