@@ -23,7 +23,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
-import me.abitno.utils.DeviceUtils;
+import com.yixia.zi.utils.DeviceUtils;
 
 public class CommonGestures {
 	public static final int SCALE_STATE_BEGIN = 0;

@@ -48,14 +48,14 @@ import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.R;
 import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
-import me.abitno.utils.BitmapHelper;
-import me.abitno.utils.FileHelper;
-import me.abitno.utils.FileUtils;
-import me.abitno.utils.IntentHelper;
-import me.abitno.utils.Log;
-import me.abitno.utils.Media;
-import me.abitno.utils.ToastHelper;
-import me.abitno.utils.UIUtils;
+import com.yixia.zi.utils.BitmapHelper;
+import com.yixia.zi.utils.FileHelper;
+import com.yixia.zi.utils.FileUtils;
+import com.yixia.zi.utils.IntentHelper;
+import com.yixia.zi.utils.Log;
+import com.yixia.zi.utils.Media;
+import com.yixia.zi.utils.ToastHelper;
+import com.yixia.zi.utils.UIUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -241,7 +241,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	}
 
 	public void showMenu() {
-
+		
 	}
 
 	private void loadView(int id) {

@@ -47,11 +47,11 @@ import io.vov.vitamio.R;
 import io.vov.vitamio.utils.CommonGestures;
 import io.vov.vitamio.utils.CommonGestures.TouchListener;
 
-import me.abitno.utils.FractionalTouchDelegate;
-import me.abitno.utils.Log;
-import me.abitno.utils.StringHelper;
-import me.abitno.utils.StringUtils;
-import me.abitno.utils.UIUtils;
+import com.yixia.zi.utils.FractionalTouchDelegate;
+import com.yixia.zi.utils.Log;
+import com.yixia.zi.utils.StringHelper;
+import com.yixia.zi.utils.StringUtils;
+import com.yixia.zi.utils.UIUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

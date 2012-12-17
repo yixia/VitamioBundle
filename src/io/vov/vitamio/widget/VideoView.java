@@ -16,8 +16,8 @@
 
 package io.vov.vitamio.widget;
 
-import me.abitno.utils.DeviceUtils;
-import me.abitno.utils.Log;
+import com.yixia.zi.utils.DeviceUtils;
+import com.yixia.zi.utils.Log;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;

@@ -36,9 +36,9 @@ import io.vov.vitamio.MediaPlayer.OnInfoListener;
 import io.vov.vitamio.MediaPlayer.OnPreparedListener;
 import io.vov.vitamio.MediaPlayer.OnSeekCompleteListener;
 import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
-import me.abitno.utils.FileHelper;
-import me.abitno.utils.Log;
-import me.abitno.utils.VitamioInstaller;
+import io.vov.vitamio.utils.VitamioInstaller;
+import com.yixia.zi.utils.FileHelper;
+import com.yixia.zi.utils.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -330,17 +330,6 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		if (mInitialized)
 			return mPlayer.getAudioTrack();
 		return 0;
-	}
-
-	public String getSubPath() {
-		if (mInitialized)
-			return mPlayer.getSubPath();
-		return null;
-	}
-
-	public void setSubShown(boolean shown) {
-		if (mInitialized)
-			mPlayer.setSubShown(shown);
 	}
 
 	protected boolean isBuffering() {
