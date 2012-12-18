@@ -21,7 +21,7 @@
             android:name="io.vov.vitamio.activity.VideoActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:launchMode="singleTop"
-            android:process=":vplayer"
+            android:process=":vitamio"
             android:windowSoftInputMode="stateAlwaysHidden" >
         </activity>
         <activity
@@ -33,7 +33,7 @@
 
         <service
             android:name="io.vov.vitamio.activity.PlayerService"
-            android:process=":vplayer" />
+            android:process=":vitamio" />
     </application>
 
 </manifest>

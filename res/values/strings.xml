@@ -17,7 +17,7 @@
     <string name="video_crop">CROP</string>
     <string name="video_screen_locked">SCREEN LOCKED</string>
     <string name="video_screen_unlocked">SCREEN UNLOCKED</string>
-    <string name="video_cannot_play">VPlayer can\'t open this file</string>
+    <string name="video_cannot_play">Vitamio can\'t open this file</string>
     <string name="video_layout_buffering_progress">Buffering: %.2f%%</string>
     <string name="closing_file">Exiting…</string>
     <string name="file_explorer_sdcard_not_available">Your SD card can\'t be read</string>
