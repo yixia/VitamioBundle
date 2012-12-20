@@ -391,7 +391,8 @@ public class MediaController extends FrameLayout {
 				setOperationInfo(mContext.getString(R.string.video_screen_locked), 1000);
 		} else {
 			mLock.setImageResource(R.drawable.mediacontroller_unlock);
-			mMenu.setVisibility(View.VISIBLE);
+			// If you wanna to show, set mMenu visible
+			mMenu.setVisibility(View.GONE);
 			mControlsButtons.setVisibility(View.VISIBLE);
 			mProgress.setEnabled(true);
 			if (mScreenLocked != toLock)
