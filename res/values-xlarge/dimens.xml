@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    
+    <dimen name="action_bar_default_height">56dp</dimen>
+
+</resources>
