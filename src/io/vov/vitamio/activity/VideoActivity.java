@@ -427,7 +427,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 	private boolean isRootActivity() {
 		ActivityManager activity = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		return activity.getRunningTasks(1).get(0).topActivity.flattenToString().endsWith("me.abitno.vplayer.VideoActivity");
+		return activity.getRunningTasks(1).get(0).topActivity.flattenToString().endsWith("io.vov.vitamio.activity.VideoActivity");
 	}
 
 	public class HeadsetPlugReceiver extends BroadcastReceiver {
