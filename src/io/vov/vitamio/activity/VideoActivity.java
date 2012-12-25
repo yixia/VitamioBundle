@@ -16,6 +16,16 @@
 
 package io.vov.vitamio.activity;
 
+import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.R;
+import io.vov.vitamio.widget.MediaController;
+import io.vov.vitamio.widget.VideoView;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -44,10 +54,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.R;
-import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;
 import com.yixia.zi.utils.BitmapHelper;
 import com.yixia.zi.utils.FileHelper;
 import com.yixia.zi.utils.FileUtils;
@@ -57,15 +63,10 @@ import com.yixia.zi.utils.Media;
 import com.yixia.zi.utils.ToastHelper;
 import com.yixia.zi.utils.UIUtils;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 @SuppressLint("HandlerLeak")
 public class VideoActivity extends Activity implements MediaController.MediaPlayerControl, VideoView.SurfaceCallback {
 
-	private static final int RESULT_FAILED = -7;
+	public static final int RESULT_FAILED = -7;
 	private static final int DEFAULT_BUF_SIZE = 0;
 	private static final int DEFAULT_VIDEO_QUALITY = MediaPlayer.VIDEOQUALITY_MEDIUM;
 	private static final boolean DEFAULT_DEINTERLACE = false;
@@ -241,7 +242,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	}
 
 	public void showMenu() {
-		
+
 	}
 
 	private void loadView(int id) {
