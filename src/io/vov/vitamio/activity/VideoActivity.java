@@ -67,7 +67,7 @@ import com.yixia.zi.utils.UIUtils;
 public class VideoActivity extends Activity implements MediaController.MediaPlayerControl, VideoView.SurfaceCallback {
 
 	public static final int RESULT_FAILED = -7;
-	private static final int DEFAULT_BUF_SIZE = 0;
+	private static final int DEFAULT_BUF_SIZE = 8192;
 	private static final int DEFAULT_VIDEO_QUALITY = MediaPlayer.VIDEOQUALITY_MEDIUM;
 	private static final boolean DEFAULT_DEINTERLACE = false;
 	private static final float DEFAULT_ASPECT_RATIO = 0f;
