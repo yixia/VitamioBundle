@@ -18,7 +18,7 @@ package io.vov.vitamio.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.view.GestureDetector;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -32,16 +32,16 @@ public class CommonGestures {
 
 	private boolean mGestureEnabled;
 
-	private GestureDetector mDoubleTapGestureDetector;
-	private GestureDetector mTapGestureDetector;
+	private GestureDetectorCompat mDoubleTapGestureDetector;
+	private GestureDetectorCompat mTapGestureDetector;
 	private ScaleGestureDetector mScaleDetector;
 
 	private Activity mContext;
 
 	public CommonGestures(Activity ctx) {
 		mContext = ctx;
-		mDoubleTapGestureDetector = new GestureDetector(mContext, new DoubleTapGestureListener());
-		mTapGestureDetector = new GestureDetector(mContext, new TapGestureListener());
+		mDoubleTapGestureDetector = new GestureDetectorCompat(mContext, new DoubleTapGestureListener());
+		mTapGestureDetector = new GestureDetectorCompat(mContext, new TapGestureListener());
 		mScaleDetector = new ScaleGestureDetector(mContext, new ScaleDetectorListener());
 	}
 
