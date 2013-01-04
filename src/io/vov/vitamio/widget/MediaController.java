@@ -16,6 +16,7 @@
 
 package io.vov.vitamio.widget;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -141,7 +142,7 @@ public class MediaController extends FrameLayout {
 		}
 	}
 
-	@TargetApi(11)
+	@SuppressLint("NewApi")
 	private void initResources() {
 		mHandler = new MHandler(this);
 		mAM = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
