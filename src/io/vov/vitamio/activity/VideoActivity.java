@@ -54,12 +54,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yixia.zi.provider.Session;
 import com.yixia.zi.utils.BitmapHelper;
 import com.yixia.zi.utils.FileHelper;
 import com.yixia.zi.utils.FileUtils;
 import com.yixia.zi.utils.IntentHelper;
 import com.yixia.zi.utils.Log;
 import com.yixia.zi.utils.Media;
+import com.yixia.zi.utils.StringHelper;
 import com.yixia.zi.utils.ToastHelper;
 import com.yixia.zi.utils.UIUtils;
 
@@ -73,6 +75,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private static final float DEFAULT_ASPECT_RATIO = 0f;
 	private static final float DEFAULT_STEREO_VOLUME = 1.0f;
 	private static final String SNAP_SHOT_PATH = "/Player";
+	private static final String SESSION_LAST_POSITION_SUFIX = ".last";
 
 	private static final IntentFilter USER_PRESENT_FILTER = new IntentFilter(Intent.ACTION_USER_PRESENT);
 	private static final IntentFilter SCREEN_FILTER = new IntentFilter(Intent.ACTION_SCREEN_ON);
@@ -88,6 +91,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private boolean mSaveUri;
 	private int mParentId;
 	private float mStartPos;
+	private boolean mEnd = false;
 	private View mViewRoot;
 	private VideoView mVideoView;
 	private View mVideoLoadingLayout;
@@ -106,6 +110,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private ServiceConnection vPlayerServiceConnection;
 	private Animation mLoadingAnimation;
 	private View mLoadingProgressView;
+	private Session mSession;
 
 	static {
 		SCREEN_FILTER.addAction(Intent.ACTION_SCREEN_OFF);
@@ -118,6 +123,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
 			return;
 
+		mSession = new Session(this);
 		vPlayerServiceConnection = new ServiceConnection() {
 			@Override
 			public void onServiceConnected(ComponentName name, IBinder service) {
@@ -186,6 +192,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		if (!mCreated)
 			return;
 		if (isInitialized()) {
+			savePosition();
 			if (vPlayer != null && vPlayer.isPlaying()) {
 				stopPlayer();
 			}
@@ -329,6 +336,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		if (isInitialized()) {
 			i.putExtra("position", (double) vPlayer.getCurrentPosition() / vPlayer.getDuration());
 			i.putExtra("duration", vPlayer.getDuration());
+			savePosition();
 		}
 		switch (resultCode) {
 		case RESULT_FAILED:
@@ -363,12 +371,13 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 	private void reOpen(Uri path, String name, boolean fromStart) {
 		if (isInitialized()) {
+			savePosition();
 			vPlayer.release();
 			vPlayer.releaseContext();
 		}
 		Intent i = getIntent();
 		i.putExtra("lockScreen", mMediaController.isLocked());
-		i.putExtra("startPosition", 7.7f);
+		i.putExtra("startPosition", (float) mSession.getDouble(mUri + SESSION_LAST_POSITION_SUFIX, 7.7f));
 		i.putExtra("fromStart", fromStart);
 		i.putExtra("displayName", name);
 		i.setData(path);
@@ -607,6 +616,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 		@Override
 		public void onPlaybackComplete() {
+			mEnd = true;
 			if (mLoopCount == 0 || mLoopCount-- > 1) {
 				vPlayer.start();
 				vPlayer.seekTo(0);
@@ -642,13 +652,25 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 	private int mVideoMode = VideoView.VIDEO_LAYOUT_SCALE;
 
-	public static final String SESSION_LAST_POSITION_SUFIX = ".last";
-
 	private void setVideoLayout() {
 		mVideoView.setVideoLayout(mVideoMode, DEFAULT_ASPECT_RATIO, vPlayer.getVideoWidth(), vPlayer.getVideoHeight(), vPlayer.getVideoAspectRatio());
 	}
 
+	private void savePosition() {
+		if (mSession != null && vPlayer != null && mUri != null) {
+			mSession.put(mUri.toString(), StringHelper.generateTime((int) (0.5 + vPlayer.getCurrentPosition())) + " / " + StringHelper.generateTime(vPlayer.getDuration()));
+			if (mEnd)
+				mSession.put(mUri + SESSION_LAST_POSITION_SUFIX, 1.0f);
+			else
+				mSession.put(mUri + SESSION_LAST_POSITION_SUFIX, (float) (vPlayer.getCurrentPosition() / (double) vPlayer.getDuration()));
+		}
+	}
+
 	private float getStartPosition() {
+		if (mFromStart)
+			return 1.1f;
+		if (mStartPos <= 0.0f || mStartPos >= 1.0f)
+			return mSession.getFloat(mUri + SESSION_LAST_POSITION_SUFIX, 7.7f);
 		return mStartPos;
 	}
 
