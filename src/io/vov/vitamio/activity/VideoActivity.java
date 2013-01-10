@@ -173,7 +173,6 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		super.onResume();
 		if (!mCreated)
 			return;
-
 		if (isInitialized()) {
 			KeyguardManager keyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
 			if (!keyguardManager.inKeyguardRestrictedInputMode()) {
@@ -254,6 +253,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 	private void loadView(int id) {
 		setContentView(id);
+		getWindow().setBackgroundDrawable(null);
 		mViewRoot = findViewById(R.id.video_root);
 		mVideoView = (VideoView) findViewById(R.id.video);
 		mVideoView.initialize(this, this, false);
