@@ -386,7 +386,6 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		if (mViewRoot != null)
 			mViewRoot.invalidate();
 		mOpened.set(false);
-		loadView(R.layout.activity_video);
 	}
 
 	public void reOpen() {
