@@ -16,12 +16,14 @@
 
 package io.vov.vitamio.activity;
 
-import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.R;
+import io.vov.vitamio.utils.VP;
 import io.vov.vitamio.widget.MediaController;
+import io.vov.vitamio.widget.OutlineTextView;
 import io.vov.vitamio.widget.VideoView;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,16 +43,20 @@ import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,16 +73,9 @@ import com.yixia.zi.utils.UIUtils;
 
 @SuppressLint("HandlerLeak")
 public class VideoActivity extends Activity implements MediaController.MediaPlayerControl, VideoView.SurfaceCallback {
-
+	
 	public static final int RESULT_FAILED = -7;
-	private static final int DEFAULT_BUF_SIZE = 8192;
-	private static final int DEFAULT_VIDEO_QUALITY = MediaPlayer.VIDEOQUALITY_MEDIUM;
-	private static final boolean DEFAULT_DEINTERLACE = false;
-	private static final float DEFAULT_ASPECT_RATIO = 0f;
-	private static final float DEFAULT_STEREO_VOLUME = 1.0f;
-	private static final String SNAP_SHOT_PATH = "/Player";
-	private static final String SESSION_LAST_POSITION_SUFIX = ".last";
-
+	
 	private static final IntentFilter USER_PRESENT_FILTER = new IntentFilter(Intent.ACTION_USER_PRESENT);
 	private static final IntentFilter SCREEN_FILTER = new IntentFilter(Intent.ACTION_SCREEN_ON);
 	private static final IntentFilter HEADSET_FILTER = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
@@ -92,10 +91,15 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private int mParentId;
 	private float mStartPos;
 	private boolean mEnd = false;
+	private String mSubPath;
+	private boolean mSubShown;
 	private View mViewRoot;
 	private VideoView mVideoView;
 	private View mVideoLoadingLayout;
 	private TextView mVideoLoadingText;
+	private View mSubtitleContainer;
+	private OutlineTextView mSubtitleText;
+	private ImageView mSubtitleImage;
 	private Uri mUri;
 	private ScreenReceiver mScreenReceiver;
 	private HeadsetPlugReceiver mHeadsetPlugReceiver;
@@ -104,6 +108,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private boolean mReceiverRegistered = false;
 	private boolean mHeadsetPlaying = false;
 	private boolean mCloseComplete = false;
+	private boolean mIsHWCodec = false;
 
 	private MediaController mMediaController;
 	private PlayerService vPlayer;
@@ -165,7 +170,9 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		super.onStart();
 		if (!mCreated)
 			return;
-		bindService(new Intent(this, PlayerService.class), vPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+		Intent serviceIntent = new Intent(this, PlayerService.class);
+		serviceIntent.putExtra("isHWCodec", mIsHWCodec);
+		bindService(serviceIntent, vPlayerServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
@@ -256,7 +263,10 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		getWindow().setBackgroundDrawable(null);
 		mViewRoot = findViewById(R.id.video_root);
 		mVideoView = (VideoView) findViewById(R.id.video);
-		mVideoView.initialize(this, this, false);
+		mVideoView.initialize(this, this, mIsHWCodec);
+		mSubtitleContainer = findViewById(R.id.subtitle_container);
+		mSubtitleText = (OutlineTextView) findViewById(R.id.subtitle_text);
+		mSubtitleImage = (ImageView) findViewById(R.id.subtitle_image);
 		mVideoLoadingText = (TextView) findViewById(R.id.video_loading_text);
 		mVideoLoadingLayout = findViewById(R.id.video_loading);
 		mLoadingProgressView = mVideoLoadingLayout.findViewById(R.id.video_loading_progress);
@@ -284,6 +294,9 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		mStartPos = i.getFloatExtra("startPosition", -1.0f);
 		mLoopCount = i.getIntExtra("loopCount", 1);
 		mParentId = i.getIntExtra("parentId", 0);
+		mSubPath = i.getStringExtra("subPath");
+		mSubShown = i.getBooleanExtra("subShown", true);
+		mIsHWCodec = i.getBooleanExtra("hwCodec", false);
 		Log.i("L: %b, N: %s, S: %b, P: %f, LP: %d", mNeedLock, mDisplayName, mFromStart, mStartPos, mLoopCount);
 	}
 
@@ -377,7 +390,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		}
 		Intent i = getIntent();
 		i.putExtra("lockScreen", mMediaController.isLocked());
-		i.putExtra("startPosition", (float) mSession.getDouble(mUri + SESSION_LAST_POSITION_SUFIX, 7.7f));
+		i.putExtra("startPosition", (float) mSession.getDouble(mUri + VP.SESSION_LAST_POSITION_SUFIX, 7.7f));
 		i.putExtra("fromStart", fromStart);
 		i.putExtra("displayName", name);
 		i.setData(path);
@@ -472,17 +485,72 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private void loadVPlayerPrefs() {
 		if (!isInitialized())
 			return;
-		vPlayer.setBuffer(VideoActivity.DEFAULT_BUF_SIZE);
-		vPlayer.setVideoQuality(DEFAULT_VIDEO_QUALITY);
-		vPlayer.setDeinterlace(DEFAULT_DEINTERLACE);
-		vPlayer.setVolume(DEFAULT_STEREO_VOLUME, DEFAULT_STEREO_VOLUME);
+		vPlayer.setBuffer(VP.DEFAULT_BUF_SIZE);
+		vPlayer.setVideoQuality(VP.DEFAULT_VIDEO_QUALITY);
+		vPlayer.setDeinterlace(VP.DEFAULT_DEINTERLACE);
+		vPlayer.setVolume(VP.DEFAULT_STEREO_VOLUME, VP.DEFAULT_STEREO_VOLUME);
+		vPlayer.setSubEncoding(VP.DEFAULT_SUB_ENCODING);
+		MarginLayoutParams lp = (MarginLayoutParams) mSubtitleContainer.getLayoutParams();
+		lp.bottomMargin = (int) VP.DEFAULT_SUB_POS;
+		mSubtitleContainer.setLayoutParams(lp);
+		vPlayer.setSubShown(mSubShown);
+		setTextViewStyle(mSubtitleText);
+		if (!TextUtils.isEmpty(mSubPath))
+			vPlayer.setSubPath(mSubPath);
 		if (mVideoView != null && isInitialized())
 			setVideoLayout();
+	}
+	
+	private void setTextViewStyle(OutlineTextView v) {
+		v.setTextColor(VP.DEFAULT_SUB_COLOR);
+		v.setTypeface(VP.getTypeface(VP.DEFAULT_TYPEFACE_INT), VP.DEFAULT_SUB_STYLE);
+		v.setShadowLayer(VP.DEFAULT_SUB_SHADOWRADIUS, 0, 0, VP.DEFAULT_SUB_SHADOWCOLOR);
 	}
 
 	private boolean isInitialized() {
 		return (mCreated && vPlayer != null && vPlayer.isInitialized());
 	}
+	
+	private Handler mSubHandler = new Handler() {
+		Bundle data;
+		String text;
+		byte[] pixels;
+		int width = 0, height = 0;
+		Bitmap bm = null;
+		int oldType = SUBTITLE_TEXT;
+
+		@Override
+		public void handleMessage(Message msg) {
+			data = msg.getData();
+			switch (msg.what) {
+			case SUBTITLE_TEXT:
+				if (oldType != SUBTITLE_TEXT) {
+					mSubtitleImage.setVisibility(View.GONE);
+					mSubtitleText.setVisibility(View.VISIBLE);
+					oldType = SUBTITLE_TEXT;
+				}
+				text = data.getString(VP.SUB_TEXT_KEY);
+				mSubtitleText.setText(text == null ? "" : text.trim());
+				break;
+			case SUBTITLE_BITMAP:
+				if (oldType != SUBTITLE_BITMAP) {
+					mSubtitleText.setVisibility(View.GONE);
+					mSubtitleImage.setVisibility(View.VISIBLE);
+					oldType = SUBTITLE_BITMAP;
+				}
+				pixels = data.getByteArray(VP.SUB_PIXELS_KEY);
+				if (bm == null || width != data.getInt(VP.SUB_WIDTH_KEY) || height != data.getInt(VP.SUB_HEIGHT_KEY)) {
+					width = data.getInt(VP.SUB_WIDTH_KEY);
+					height = data.getInt(VP.SUB_HEIGHT_KEY);
+					bm = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+				}
+				if (pixels != null)
+					bm.copyPixelsFromBuffer(ByteBuffer.wrap(pixels));
+				mSubtitleImage.setImageBitmap(bm);
+				break;
+			}
+		}
+	};
 
 	private AtomicBoolean mOpened = new AtomicBoolean(Boolean.FALSE);
 	private boolean mSurfaceCreated = false;
@@ -499,6 +567,8 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private static final int BUFFER_COMPLETE = 13;
 	private static final int CLOSE_START = 21;
 	private static final int CLOSE_COMPLETE = 22;
+	private static final int SUBTITLE_TEXT = 0;
+	private static final int SUBTITLE_BITMAP = 1;
 	private Handler vPlayerHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -514,7 +584,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 						if (mVideoView != null)
 							vPlayer.setDisplay(mVideoView.getHolder());
 						if (mUri != null)
-							vPlayer.initialize(mUri, mDisplayName, mSaveUri, getStartPosition(), vPlayerListener, mParentId);
+							vPlayer.initialize(mUri, mDisplayName, mSaveUri, getStartPosition(), vPlayerListener, mParentId, mIsHWCodec);
 					}
 				}
 				break;
@@ -581,7 +651,32 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	private PlayerService.VPlayerListener vPlayerListener = new PlayerService.VPlayerListener() {
 		@Override
 		public void onHWRenderFailed() {
+			if (Build.VERSION.SDK_INT < 11 && mIsHWCodec) {
+				vPlayerHandler.sendEmptyMessage(HW_FAILED);
+				vPlayerHandler.sendEmptyMessageDelayed(HW_FAILED, 200);
+			}
+		}
 
+		@Override
+		public void onSubChanged(String sub) {
+			Message msg = new Message();
+			Bundle b = new Bundle();
+			b.putString(VP.SUB_TEXT_KEY, sub);
+			msg.setData(b);
+			msg.what = SUBTITLE_TEXT;
+			mSubHandler.sendMessage(msg);
+		}
+
+		@Override
+		public void onSubChanged(byte[] pixels, int width, int height) {
+			Message msg = new Message();
+			Bundle b = new Bundle();
+			b.putByteArray(VP.SUB_PIXELS_KEY, pixels);
+			b.putInt(VP.SUB_WIDTH_KEY, width);
+			b.putInt(VP.SUB_HEIGHT_KEY, height);
+			msg.setData(b);
+			msg.what = SUBTITLE_BITMAP;
+			mSubHandler.sendMessage(msg);
 		}
 
 		@Override
@@ -647,21 +742,22 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 				mMediaController.setDownloadRate(String.format("%dKB/s", kbPerSec));
 			}
 		}
+
 	};
 
 	private int mVideoMode = VideoView.VIDEO_LAYOUT_SCALE;
 
 	private void setVideoLayout() {
-		mVideoView.setVideoLayout(mVideoMode, DEFAULT_ASPECT_RATIO, vPlayer.getVideoWidth(), vPlayer.getVideoHeight(), vPlayer.getVideoAspectRatio());
+		mVideoView.setVideoLayout(mVideoMode, VP.DEFAULT_ASPECT_RATIO, vPlayer.getVideoWidth(), vPlayer.getVideoHeight(), vPlayer.getVideoAspectRatio());
 	}
 
 	private void savePosition() {
 		if (mSession != null && vPlayer != null && mUri != null) {
 			mSession.put(mUri.toString(), StringHelper.generateTime((int) (0.5 + vPlayer.getCurrentPosition())) + " / " + StringHelper.generateTime(vPlayer.getDuration()));
 			if (mEnd)
-				mSession.put(mUri + SESSION_LAST_POSITION_SUFIX, 1.0f);
+				mSession.put(mUri + VP.SESSION_LAST_POSITION_SUFIX, 1.0f);
 			else
-				mSession.put(mUri + SESSION_LAST_POSITION_SUFIX, (float) (vPlayer.getCurrentPosition() / (double) vPlayer.getDuration()));
+				mSession.put(mUri + VP.SESSION_LAST_POSITION_SUFIX, (float) (vPlayer.getCurrentPosition() / (double) vPlayer.getDuration()));
 		}
 	}
 
@@ -669,7 +765,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 		if (mFromStart)
 			return 1.1f;
 		if (mStartPos <= 0.0f || mStartPos >= 1.0f)
-			return mSession.getFloat(mUri + SESSION_LAST_POSITION_SUFIX, 7.7f);
+			return mSession.getFloat(mUri + VP.SESSION_LAST_POSITION_SUFIX, 7.7f);
 		return mStartPos;
 	}
 
@@ -732,7 +828,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 
 	@Override
 	public float scale(float scaleFactor) {
-		float userRatio = DEFAULT_ASPECT_RATIO;
+		float userRatio = VP.DEFAULT_ASPECT_RATIO;
 		int videoWidth = vPlayer.getVideoWidth();
 		int videoHeight = vPlayer.getVideoHeight();
 		float videoRatio = vPlayer.getVideoAspectRatio();
@@ -762,7 +858,7 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 			Uri imgUri = null;
 			Bitmap bitmap = vPlayer.getCurrentFrame();
 			if (bitmap != null) {
-				File screenshotsDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + SNAP_SHOT_PATH);
+				File screenshotsDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + VP.SNAP_SHOT_PATH);
 				if (!screenshotsDirectory.exists()) {
 					screenshotsDirectory.mkdirs();
 				}

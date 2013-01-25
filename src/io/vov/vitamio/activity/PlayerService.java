@@ -27,6 +27,9 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.SurfaceHolder;
 
+import com.yixia.zi.utils.FileHelper;
+import com.yixia.zi.utils.Log;
+
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnCompletionListener;
@@ -35,16 +38,17 @@ import io.vov.vitamio.MediaPlayer.OnHWRenderFailedListener;
 import io.vov.vitamio.MediaPlayer.OnInfoListener;
 import io.vov.vitamio.MediaPlayer.OnPreparedListener;
 import io.vov.vitamio.MediaPlayer.OnSeekCompleteListener;
+import io.vov.vitamio.MediaPlayer.OnSubtitleUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
+import io.vov.vitamio.utils.VP;
 import io.vov.vitamio.utils.VitamioInstaller;
-import com.yixia.zi.utils.FileHelper;
-import com.yixia.zi.utils.Log;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class PlayerService extends Service implements OnBufferingUpdateListener, OnCompletionListener, OnPreparedListener, OnVideoSizeChangedListener, OnErrorListener, OnInfoListener, OnSeekCompleteListener {
+public class PlayerService extends Service implements OnBufferingUpdateListener, OnCompletionListener, OnPreparedListener, OnVideoSizeChangedListener, OnErrorListener, OnInfoListener, OnSeekCompleteListener, OnSubtitleUpdateListener {
 	private MediaPlayer mPlayer;
 	private VPlayerListener mListener;
 	private Uri mUri;
@@ -82,16 +86,22 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		mInitialized = false;
 		mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		mTelephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+		
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (VitamioInstaller.isNativeLibsInited(this)) {
-			vplayerInit();
+			vplayerInit(intent.getBooleanExtra("isHWCodec", false));
 		} else {
 			stopSelf();
 		}
 		Log.d("CREATE OK");
+		return super.onStartCommand(intent, flags, startId);
 	}
-
-	private void vplayerInit() {
-		mPlayer = new MediaPlayer(PlayerService.this.getApplicationContext(), false);
+	
+	private void vplayerInit(boolean isHWCodec) {
+		mPlayer = new MediaPlayer(PlayerService.this.getApplicationContext(), isHWCodec);
 		mPlayer.setOnHWRenderFailedListener(new OnHWRenderFailedListener() {
 			@Override
 			public void onFailed() {
@@ -130,9 +140,9 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		return mInitialized;
 	}
 
-	public boolean initialize(Uri filePath, String displayName, boolean saveUri, float startPos, VPlayerListener listener, int parentId) {
+	public boolean initialize(Uri filePath, String displayName, boolean saveUri, float startPos, VPlayerListener listener, int parentId, boolean isHWCodec) {
 		if (mPlayer == null)
-			vplayerInit();
+			vplayerInit(isHWCodec);
 		mListener = listener;
 		mOldUri = mUri;
 		mUri = filePath;
@@ -332,6 +342,51 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		return 0;
 	}
 
+	public HashMap<String, Integer> getAudioTrackMap() {
+		if (!mInitialized)
+			return null;
+		String enc = VP.DEFAULT_META_ENCODING;
+		return mPlayer.getAudioTrackMap(enc.equals(VP.DEFAULT_META_ENCODING) ? getMetaEncoding() : enc);
+	}
+
+	public HashMap<String, Object> getSubTrackMap() {
+		if (!mInitialized)
+			return null;
+		String enc = VP.DEFAULT_SUB_ENCODING;
+		HashMap<String, Object> trackMap = new HashMap<String, Object>();
+		HashMap<String, Integer> m = mPlayer.getSubTrackMap(enc.equals(VP.DEFAULT_SUB_ENCODING) ? getMetaEncoding() : enc);
+		if (m != null)
+			for (String k : m.keySet())
+				trackMap.put(k, m.get(k));
+
+		if (mSubPaths != null)
+			for (String s : mSubPaths)
+				trackMap.put(new File(s).getName(), s);
+
+		return trackMap;
+	}
+
+	public int getSubTrack() {
+		if (mInitialized)
+			return mPlayer.getSubTrack();
+		return 0;
+	}
+
+	public void setSubTrack(int id) {
+		if (mInitialized)
+			mPlayer.setSubTrack(id);
+	}
+
+	public String getSubPath() {
+		if (mInitialized)
+			return mPlayer.getSubPath();
+		return null;
+	}
+
+	public void setSubShown(boolean shown) {
+		if (mInitialized)
+			mPlayer.setSubShown(shown);
+	}
 	protected boolean isBuffering() {
 		return (mInitialized && mPlayer.isBuffering());
 	}
@@ -371,6 +426,13 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		return -1;
 	}
 
+	protected void setSubEncoding(String encoding) {
+		if (mInitialized) {
+			String enc = encoding.equals(VP.DEFAULT_SUB_ENCODING) ? null : encoding;
+			mPlayer.setSubEncoding(enc);
+		}
+	}
+
 	public void setSubPath(String subPath) {
 		if (mInitialized)
 			mPlayer.setSubPath(subPath);
@@ -380,6 +442,10 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		public void onHWRenderFailed();
 
 		public void onVideoSizeChanged(int width, int height);
+
+		public void onSubChanged(String text);
+
+		public void onSubChanged(byte[] pixels, int width, int height);
 
 		public void onOpenStart();
 
@@ -442,10 +508,12 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 		mSeekTo = -1;
 		mListener.onOpenSuccess();
 		if (!mFromNotification) {
+			setSubEncoding(VP.DEFAULT_SUB_ENCODING);
 			if (mUri != null)
 				mSubPaths = getSubFiles(mUri.getPath());
 			if (mSubPaths != null)
 				setSubPath(FileHelper.getCanonical(new File(mSubPaths[0])));
+			setSubShown(VP.DEFAULT_SUB_SHOWN);
 		}
 	}
 
@@ -460,6 +528,18 @@ public class PlayerService extends Service implements OnBufferingUpdateListener,
 
 	@Override
 	public void onBufferingUpdate(MediaPlayer arg0, int arg1) {
+	}
+
+	@Override
+	public void onSubtitleUpdate(String arg0) {
+		if (mListener != null)
+			mListener.onSubChanged(arg0);
+	}
+
+	@Override
+	public void onSubtitleUpdate(byte[] arg0, int arg1, int arg2) {
+		if (mListener != null)
+			mListener.onSubChanged(arg0, arg1, arg2);
 	}
 
 	@Override

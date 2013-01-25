@@ -23,5 +23,5 @@
     <string name="file_explorer_sdcard_not_available">Your SD card can\'t be read</string>
     <string name="video_screenshot_save_in">Screenshot saved in %s.</string>
     <string name="video_screenshot_failed">Oops, screenshot failed.</string>
-
+    <string name="subtitle_image">subtitle</string>
 </resources>

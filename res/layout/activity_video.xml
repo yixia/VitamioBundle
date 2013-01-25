@@ -44,6 +44,37 @@
                 android:textColor="@android:color/white"
                 android:textSize="20.0sp" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/subtitle_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10.0dip" >
+
+            <io.vov.vitamio.widget.OutlineTextView
+                android:id="@+id/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_vertical|center_horizontal"
+                android:shadowColor="@color/gray"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/subtitle_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/subtitle_image"
+                android:gravity="center_vertical|center_horizontal"
+                android:visibility="gone" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </io.vov.vitamio.widget.CenterLayout>
