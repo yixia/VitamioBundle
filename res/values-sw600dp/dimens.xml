@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    
+    <dimen name="action_bar_default_height">56dp</dimen>
+    <dimen name="mediacontroller_buttons_top_margin">8dp</dimen>
+    <dimen name="mediacontroller_buttons_bottom_margin">2dp</dimen>
+
+</resources>

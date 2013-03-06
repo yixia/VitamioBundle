@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#00000000"
+    android:orientation="horizontal"
+    android:padding="0dip" >
+
+    <ImageView
+        android:id="@+id/operation_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/video_volumn_bg" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:paddingBottom="25dip" >
+
+        <ImageView
+            android:id="@+id/operation_full"
+            android:layout_width="94dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:src="@drawable/video_num_bg" />
+
+        <ImageView
+            android:id="@+id/operation_percent"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:scaleType="matrix"
+            android:src="@drawable/video_num_front" />
+    </FrameLayout>
+
+</FrameLayout>
