@@ -124,21 +124,28 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
 		int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
+		if (mVideoWidth > 0 && mVideoHeight > 0) {
+			if (mVideoWidth >= mVideoHeight) {
+				width = getWidth();
+				height = mVideoHeight * width / mVideoWidth;
+			} else {
+				height = getHeight();
+				width = mVideoWidth * height / mVideoHeight;
+			}
+		}
 		setMeasuredDimension(width, height);
 	}
 
 	/**
 	 * Set the display options
 	 * 
-	 * @param layout
-	 *            <ul>
-	 *            <li>{@link #VIDEO_LAYOUT_ORIGIN}
-	 *            <li>{@link #VIDEO_LAYOUT_SCALE}
-	 *            <li>{@link #VIDEO_LAYOUT_STRETCH}
-	 *            <li>{@link #VIDEO_LAYOUT_ZOOM}
-	 *            </ul>
-	 * @param aspectRatio
-	 *            video aspect ratio, will audo detect if 0.
+	 * @param layout <ul>
+	 * <li>{@link #VIDEO_LAYOUT_ORIGIN}
+	 * <li>{@link #VIDEO_LAYOUT_SCALE}
+	 * <li>{@link #VIDEO_LAYOUT_STRETCH}
+	 * <li>{@link #VIDEO_LAYOUT_ZOOM}
+	 * </ul>
+	 * @param aspectRatio video aspect ratio, will audo detect if 0.
 	 */
 	public void setVideoLayout(int layout, float aspectRatio) {
 		LayoutParams lp = getLayoutParams();
