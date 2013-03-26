@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="vitamio_name">Vitamio</string>
+    <string name="vitamio_init_decoders">Initializing decoders…</string>
+    <string name="vitamio_videoview_error_title">Cannot play video</string>
+    <string name="vitamio_videoview_error_text_invalid_progressive_playback">Sorry, this video is not valid for streaming to this device.</string>
+    <string name="vitamio_videoview_error_text_unknown">Sorry, this video cannot be played.</string>
+    <string name="vitamio_videoview_error_button">OK</string>
+    <string name="mediacontroller_play_pause">Play/Pause</string>
+    <string name="content_desc_lock">lock</string>
+    <string name="content_desc_menu">menu</string>
+    <string name="video_layout_loading">Loading&#8230;</string>
+    <string name="video_original">100%</string>
+    <string name="video_fit_screen">FIT SCREEN</string>
+    <string name="video_stretch">STRETCH</string>
+    <string name="video_crop">CROP</string>
+    <string name="video_screen_locked">SCREEN LOCKED</string>
+    <string name="video_screen_unlocked">SCREEN UNLOCKED</string>
+    <string name="video_cannot_play">Vitamio can\'t open this file</string>
+    <string name="video_layout_buffering_progress">Buffering: %.2f%%</string>
+    <string name="closing_file">Exiting…</string>
+    <string name="file_explorer_sdcard_not_available">Your SD card can\'t be read</string>
+    <string name="video_screenshot_save_in">Screenshot saved in %s.</string>
+    <string name="video_screenshot_failed">Oops, screenshot failed.</string>
+    <string name="subtitle_image">subtitle</string>
+</resources>
