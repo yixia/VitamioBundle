@@ -4,22 +4,10 @@
     android:versionName="3.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
-    
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    
+        android:minSdkVersion="7"
+        android:targetSdkVersion="16" />
+
     <application
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/vitamio_name" >
         <activity
@@ -28,18 +16,6 @@
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="io.vov.vitamio.activity.VideoActivity"
-            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
-            android:launchMode="singleTop"
-            android:process=":vitamio"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden" >
-        </activity>
-
-        <service
-            android:name="io.vov.vitamio.activity.PlayerService"
-            android:process=":vitamio" />
     </application>
 
 </manifest>
