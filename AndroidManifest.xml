@@ -19,7 +19,6 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     
     <application
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/vitamio_name" >
         <activity
