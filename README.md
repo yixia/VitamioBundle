@@ -24,8 +24,8 @@ Only few important features are listed here, we have fix many bugs and may intro
 4. Improve streaming, especially the HLS support.
 5. OpenSSL included, so some SSL related protocols, such as https, tls, rtmps, rtmpts, are supported.
 6. Playback speed control from 0.5x to 2.0x.
-7. Audio amplify to 2 times volume.
-8. Improved subtitle support. Include external bitmap subtitles.
+7. Audio amplify to 2x volume.
+8. Improved subtitle support, including external bitmap subtitles.
 9. Cache online video to local storage and can be reused until you delete the cache file.
 10. More MediaPlayer API, e.g. `getMetadata`.
 11. The full Java code is open to all developers, modify and contribute is welcome.

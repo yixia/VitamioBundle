@@ -755,12 +755,6 @@ public class MediaPlayer {
    * though this method is not called. However, no timed text track will be
    * selected until this function is called.
    * </p>
-   * <p>
-   * Currently, only timed text tracks or audio tracks can be selected via this
-   * method. In addition, the support for selecting an audio track at runtime is
-   * pretty limited in that an audio track can only be selected in the
-   * <em>Prepared</em> state.
-   * </p>
    *
    * @param index the index of the track to be selected. The valid range of the
    *              index is 0..total number of track - 1. The total number of tracks
@@ -992,78 +986,12 @@ public class MediaPlayer {
    */
   public native void setMetaEncoding(String encoding);
 
-  @Deprecated
-  private native byte[] getAudioTracks();
-
-  /**
-   * Get the audio tracks embeded in the movie (e.g. "English", 3).
-   *
-   * @param encoding the encoding to format String, will detect it if null
-   * @return Map of track name and track number
-   * @deprecated Use the new API {@link #getTrackInfo()}
-   */
-  @Deprecated
-  public HashMap<String, Integer> getAudioTrackMap(String encoding) {
-    return getTrackMap(getAudioTracks(), encoding);
-  }
-
-  @Deprecated
-  private HashMap<String, Integer> getTrackMap(byte[] tracks, String encoding) {
-    HashMap<String, Integer> trackMap = new HashMap<String, Integer>();
-    String trackString;
-    int trackNum;
-    try {
-      trackString = new String(tracks, encoding);
-    } catch (Exception e) {
-      Log.e("getTrackMap exception");
-      trackString = new String(tracks);
-    }
-    for (String s : trackString.split("!#!")) {
-      try {
-        if (s.contains("."))
-          trackNum = Integer.parseInt(s.split("\\.")[0]);
-        else
-          trackNum = Integer.parseInt(s);
-        trackMap.put(trackString, trackNum);
-      } catch (NumberFormatException e) {
-      }
-    }
-
-    return trackMap;
-  }
-
   /**
    * Get the audio track number in playback
    *
    * @return track number
    */
   public native int getAudioTrack();
-
-  /**
-   * Set the audio track to play, must be in the result of
-   * {@link #getAudioTrackMap(String)}
-   *
-   * @param audioIndex the track number
-   * @deprecated Use the new API {@link #selectTrack()}
-   */
-  @Deprecated
-  public native void setAudioTrack(int audioIndex);
-
-  /**
-   * First open select a audio track
-   *
-   * @param audioIndex {@hide}
-   */
-  public void setInitialAudioTrack(int audioIndex) {
-  }
-
-  /**
-   * First open select a sub track
-   *
-   * @param audioIndex {@hide}
-   */
-  public void setInitialSubTrack(int subIndex) {
-  }
 
   /**
    * Tell the MediaPlayer whether to show timed text
@@ -1100,31 +1028,6 @@ public class MediaPlayer {
    * @return track number
    */
   public native int getTimedTextTrack();
-
-  /**
-   * Set the subtitle track to display, must be in the result of
-   * {@link #getSubTrackMap(String)}
-   *
-   * @param audioIndex the track number
-   * @deprecated Use the new API {@link #selectTrack()}
-   */
-  @Deprecated
-  public native void setSubTrack(int trackId);
-
-  @Deprecated
-  private native byte[] getSubTracks();
-
-  /**
-   * Get the subtitles embeded in the movie (e.g. "English", 3).
-   *
-   * @param encoding the encoding to format String, will detect it if null
-   * @return Map of track name and track number
-   * @deprecated Use the new API {@link #getTrackInfo()}
-   */
-  @Deprecated
-  public HashMap<String, Integer> getSubTrackMap(String encoding) {
-    return getTrackMap(getSubTracks(), encoding);
-  }
 
   private int audioTrackInit(int sampleRateInHz, int channels) {
     audioTrackRelease();
