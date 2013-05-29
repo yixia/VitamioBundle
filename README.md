@@ -31,3 +31,10 @@ Only few important features are listed here, we have fix many bugs and may intro
 11. The full Java code is open to all developers, modify and contribute is welcome.
 12. Support RGBA\_8888 rendering, and increase the color conversion accuracy and speed.
 13. Enhance the hardware decoding in Android 16+.
+
+
+Requirements
+------------
+
+* Reference [ZI](https://github.com/yixia/zi) as Android library project
+
