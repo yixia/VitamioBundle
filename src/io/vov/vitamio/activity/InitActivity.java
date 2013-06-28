@@ -76,10 +76,15 @@ public class InitActivity extends Activity {
 			InitActivity ctx = (InitActivity) mContext.get();
 			switch (msg.what) {
 			case 0:
-				ctx.mPD.dismiss();
+				try {
+					ctx.mPD.dismiss();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				Intent src = ctx.getIntent();
 				Intent i = new Intent();
-				i.setClassName(src.getStringExtra("package"), src.getStringExtra("className"));
+				i.setClassName(src.getStringExtra("package"),
+						src.getStringExtra("className"));
 				i.setData(src.getData());
 				i.putExtras(src);
 				i.putExtra(FROM_ME, true);
