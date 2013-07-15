@@ -16,11 +16,16 @@
 
 package io.vov.vitamio;
 
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGL11;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import javax.microedition.khronos.egl.*;
-import javax.microedition.khronos.opengles.GL;
 
 /**
  * DON'T MODIFY THIS FILE IF YOU'RE NOT FAMILIAR WITH EGL, IT'S USED BY NATIVE CODE!!!

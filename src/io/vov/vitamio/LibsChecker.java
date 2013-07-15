@@ -29,7 +29,7 @@ import android.content.Intent;
  * 	if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
  * 		return;
  *
- * 	// Code using Vitamio should go below {@link #checkVitamioLibs()}
+ * 	// Code using Vitamio should go below {@link LibsChecker#checkVitamioLibs}
  * }
  * </pre>
  */

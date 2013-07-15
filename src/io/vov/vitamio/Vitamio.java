@@ -17,13 +17,20 @@
 package io.vov.vitamio;
 
 import android.content.Context;
+
 import com.yixia.vitamio.library.R;
 import com.yixia.zi.utils.CPU;
 import com.yixia.zi.utils.ContextUtils;
 import com.yixia.zi.utils.IOUtils;
 import com.yixia.zi.utils.Log;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

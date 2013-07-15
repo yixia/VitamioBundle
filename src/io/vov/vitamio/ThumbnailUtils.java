@@ -33,13 +33,14 @@ import io.vov.vitamio.provider.MediaStore.Video;
  * </pre>
  */
 public class ThumbnailUtils {
+  private static final int OPTIONS_NONE = 0x0;
+  private static final int OPTIONS_SCALE_UP = 0x1;
   public static final int OPTIONS_RECYCLE_INPUT = 0x2;
   public static final int TARGET_SIZE_MINI_THUMBNAIL_WIDTH = 426;
   public static final int TARGET_SIZE_MINI_THUMBNAIL_HEIGHT = 320;
   public static final int TARGET_SIZE_MICRO_THUMBNAIL_WIDTH = 212;
   public static final int TARGET_SIZE_MICRO_THUMBNAIL_HEIGHT = 160;
-  private static final int OPTIONS_NONE = 0x0;
-  private static final int OPTIONS_SCALE_UP = 0x1;
+  
 
   public static Bitmap createVideoThumbnail(Context ctx, String filePath, int kind) {
     if (!Vitamio.isInitialized(ctx)) {

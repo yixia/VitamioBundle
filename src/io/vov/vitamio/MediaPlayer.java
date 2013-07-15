@@ -27,10 +27,16 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.net.Uri;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.PowerManager;
 import android.util.SparseArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+
 import com.yixia.zi.utils.FileUtils;
 import com.yixia.zi.utils.Log;
 
@@ -90,6 +96,9 @@ public class MediaPlayer {
   public static final int VIDEOQUALITY_LOW = -16;
   public static final int VIDEOQUALITY_MEDIUM = 0;
   public static final int VIDEOQUALITY_HIGH = 16;
+  
+  public static final int VIDEOCHROMA_RGB565 = 0;
+  public static final int VIDEOCHROMA_RGBA = 1;
   /**
    * The subtitle displayed is embeded in the movie
    */
@@ -555,6 +564,15 @@ public class MediaPlayer {
    */
   public native boolean isPlaying();
 
+
+	/**
+   * Adaptive streaming support, default is false
+   *
+   * @param adaptive true if wanna adaptive steam
+   *
+   */
+  public native void setAdaptiveStream(boolean adaptive);
+
   /**
    * Seeks to specified time position.
    *
@@ -573,7 +591,7 @@ public class MediaPlayer {
   /**
    * Get the current video frame
    *
-   * @return
+   * @return bitmap object
    */
   public native Bitmap getCurrentFrame();
 
@@ -654,7 +672,7 @@ public class MediaPlayer {
   /**
    * Amplify audio
    *
-   * @param ratio, e.g. 3.5
+   * @param ratio  e.g. 3.5
    */
   public native void setAudioAmplify(float ratio);
 
@@ -693,7 +711,7 @@ public class MediaPlayer {
   /**
    * Use default chartset {@link #getTrackInfo()} method.
    *
-   * @return
+   * @return array of {@link TrackInfo}
    */
   public TrackInfo[] getTrackInfo() {
     return getTrackInfo(Charset.defaultCharset().name());
@@ -726,7 +744,7 @@ public class MediaPlayer {
   /**
    * @param mediaTrackType
    * @param trackInfo
-   * @return
+   * @return {@link TrackInfo#getTrackInfoArray()}
    */
   public SparseArray<String> findTrackFromTrackInfo(int mediaTrackType, TrackInfo[] trackInfo) {
     for (int i = 0; i < trackInfo.length; i++) {
@@ -921,8 +939,8 @@ public class MediaPlayer {
    * Returns the aspect ratio of the video.
    *
    * @return the aspect ratio of the video, or 0 if there is no video, or the
-   *         width and height is not available. {@see
-   *         io.vov.vitamio.VideoView#setVideoLayout(int, float)}
+   *         width and height is not available.
+	 *         @see io.vov.vitamio.widget.VideoView#setVideoLayout(int, float)
    */
   public native float getVideoAspectRatio();
 
@@ -937,7 +955,17 @@ public class MediaPlayer {
    *                </ul>
    */
   public native void setVideoQuality(int quality);
-
+  
+  /**
+   * Set the Video Chroma quality when play video, default is VIDEOCHROMA_RGB565
+   * You can set on after {@link #prepareAsync()}.
+   * @param chroma <ul>
+   *                <li>{@link #VIDEOCHROMA_RGB565}
+   *                <li>{@link #VIDEOCHROMA_RGBA}
+   *                </ul>
+   */
+  public native void setVideoChroma(int chroma);
+  
   /**
    * Set if should deinterlace the video picture
    *
@@ -991,7 +1019,14 @@ public class MediaPlayer {
    *
    * @return track number
    */
-  public native int getAudioTrack();
+	public native int getAudioTrack();
+
+	/**
+   * Get the video track number in playback
+	 *
+	 * @return track number
+	 */
+	public native int getVideoTrack();
 
   /**
    * Tell the MediaPlayer whether to show timed text

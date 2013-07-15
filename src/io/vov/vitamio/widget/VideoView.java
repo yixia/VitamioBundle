@@ -28,12 +28,26 @@ import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
-import android.view.*;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+
 import com.yixia.vitamio.library.R;
 import com.yixia.zi.utils.Log;
+
 import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.MediaPlayer.*;
+import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
+import io.vov.vitamio.MediaPlayer.OnCompletionListener;
+import io.vov.vitamio.MediaPlayer.OnErrorListener;
+import io.vov.vitamio.MediaPlayer.OnInfoListener;
+import io.vov.vitamio.MediaPlayer.OnPreparedListener;
+import io.vov.vitamio.MediaPlayer.OnSeekCompleteListener;
+import io.vov.vitamio.MediaPlayer.OnTimedTextListener;
+import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
+import io.vov.vitamio.MediaPlayer.TrackInfo;
 import io.vov.vitamio.Vitamio;
 
 import java.io.IOException;
@@ -47,7 +61,7 @@ import java.util.List;
  * <p/>
  * VideoView also provide many wrapper methods for
  * {@link io.vov.vitamio.MediaPlayer}, such as {@link #getVideoWidth()},
- * {@link #setSubShown(boolean)}
+ * {@link #setTimedTextShown(boolean)}
  */
 public class VideoView extends SurfaceView implements MediaController.MediaPlayerControl {
   public static final int VIDEO_LAYOUT_ORIGIN = 0;
@@ -318,7 +332,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     mContext = ctx;
     mVideoWidth = 0;
     mVideoHeight = 0;
-    getHolder().setFormat(PixelFormat.RGBA_8888);
+    getHolder().setFormat(PixelFormat.RGBA_8888); // PixelFormat.RGB_565
     getHolder().addCallback(mSHCallback);
     setFocusable(true);
     setFocusableInTouchMode(true);
@@ -594,6 +608,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public void setVideoQuality(int quality) {
     if (mMediaPlayer != null)
       mMediaPlayer.setVideoQuality(quality);
+  }
+  
+  public void setVideoChroma(int chroma) {
+  	if (mMediaPlayer != null)
+  		mMediaPlayer.setVideoChroma(chroma);
   }
 
   public void setBufferSize(int bufSize) {
