@@ -9,7 +9,7 @@ Upgrade from 3.0
 
 You don't need to change anything once 4.0 is finally released. But if you want to use it right now, warnnings below:
 
-1. If you use RGBA\_8888 surface to render video, you use the VideoView from Vitamio, nothing to do. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView. If You use RGB\_565 surface render video, you must add `getHolder().setFormat(PixelFormat.RGB_565)` and `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)`
+1. If you use RGBA\_8888 surface to render video, you use the VideoView from Vitamio, nothing to do. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView. If you use RGB\_565 surface render video, you must add `getHolder().setFormat(PixelFormat.RGB_565)` and `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)`
 
 
 
