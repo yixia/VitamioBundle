@@ -4,7 +4,7 @@ Vitamio
 Vitamio for Android
 
 
-Upgrade 4.0 from 3.0
+Upgrade from 3.0
 ----------------
 
 You don't need to change anything once 4.0 is finally released. But if you want to use it right now, warnnings below:
