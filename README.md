@@ -1,10 +1,10 @@
-Vitamio 4.0
+Vitamio
 ===============
 
-Vitamio 4.0 for Android
+Vitamio for Android
 
 
-Upgrade from 3.0
+Upgrade 4.0 from 3.0
 ----------------
 
 You don't need to change anything once 4.0 is finally released. But if you want to use it right now, warnnings below:
