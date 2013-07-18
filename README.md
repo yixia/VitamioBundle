@@ -1,7 +1,7 @@
-Vitamio 4.0
+Vitamio
 ===============
 
-Vitamio 4.0 for Android
+Vitamio for Android
 
 
 Upgrade from 3.0
