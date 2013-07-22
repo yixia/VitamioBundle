@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 4.0.1 *(2013-07-22)*
+
+ * Refactor `VitamioBundle`, dont need `ZI`.
+ * Fix `MediaMetadataRetriever` API bug.
+ * Fix other bug.
+
 Version 4.0.0 *(2013-07-15)*
 ----------------------------
 

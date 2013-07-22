@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.vov.vitamio.demo"
+    android:versionCode="2"
+    android:versionName="0.0." >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/vitamio_demo_name" >
+
+        <!-- Don't forgot InitActivity -->
+        <activity
+            android:name="io.vov.vitamio.activity.InitActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".VitamioListActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MediaPlayerDemo"
+            android:label="Media/MediaPlayer" >
+        </activity>
+        <activity
+            android:name=".VideoViewDemo"
+            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+            android:label="Media/VideoView" >
+        </activity>
+        <activity
+            android:name=".MediaPlayerDemo_Video"
+            android:label="Media/MediaPlayer" >
+        </activity>
+        <activity
+            android:name=".MediaPlayerDemo_Audio"
+            android:label="Media/MediaPlayer" >
+        </activity>
+        <activity
+            android:name=".MediaMetadataRetrieverDemo"
+            android:label="Media/MediaMetadata" >
+        </activity>
+    </application>
+
+</manifest>

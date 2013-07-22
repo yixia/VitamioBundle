@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.yixia.vitamio.library"
+          android:versionCode="400"
+          android:versionName="4.0">
+
+    <uses-sdk
+            android:minSdkVersion="7"
+            android:targetSdkVersion="17"/>
+
+    <application
+            android:icon="@drawable/ic_launcher"
+            android:label="Vitamio">
+        <activity
+                android:name="io.vov.vitamio.activity.InitActivity"
+                android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+                android:launchMode="singleTop"
+                android:theme="@android:style/Theme.NoTitleBar"
+                android:windowSoftInputMode="stateAlwaysHidden"/>
+    </application>
+
+</manifest>
