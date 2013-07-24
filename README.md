@@ -7,7 +7,7 @@ Vitamio for Android
 Upgrade from 3.0
 ----------------
 
-You don't need to change anything once 4.0 is finally released. But if you want to use it right now, warnnings below:
+You don't need to change anything once 4.x is finally released. But if you want to use it right now, warnnings below:
 
 1. If you use RGBA\_8888 surface to render video, you use the VideoView from Vitamio, nothing to do. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView. If you use RGB\_565 surface render video, you must add `getHolder().setFormat(PixelFormat.RGB_565)` and `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)`
 
@@ -34,9 +34,8 @@ Only few important features are listed here, we have fix many bugs and may intro
 14. Support ARMV6 CPU, may have some bugs.
 
 
+License
+-------
 
-Requirements
-------------
-
-* Reference [ZI](https://github.com/yixia/zi) as Android library project
+Please refer [License](http://www.vitamio.org/en/License)
 
