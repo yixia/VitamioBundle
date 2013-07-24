@@ -372,6 +372,12 @@ public class MediaPlayer {
     setDataSource(context, uri, headerBuffer == null ? null : headerBuffer.toString());
     return;
   }
+  
+  
+  private void onHWRenderFailed() {
+     if (mOnHWRenderFailedListener != null)
+         mOnHWRenderFailedListener.onFailed();
+  }
 
   public void setOnHWRenderFailedListener(OnHWRenderFailedListener l) {
     mOnHWRenderFailedListener = l;
