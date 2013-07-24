@@ -143,7 +143,7 @@ public class MediaScanner {
       long prescan = System.currentTimeMillis();
 
       for (int i = 0; i < directories.length; i++) {
-        if (!StringUtils.isBlank(directories[i])) {
+        if (!TextUtils.isEmpty(directories[i])) {
           directories[i] = StringUtils.fixLastSlash(directories[i]);
           processDirectory(directories[i], MediaFile.sFileExtensions);
         }
@@ -351,7 +351,7 @@ public class MediaScanner {
       } else if (name.equalsIgnoreCase("artist")) {
         mArtist = value.trim();
       } else if (name.equalsIgnoreCase("albumartist")) {
-        if (StringUtils.isBlank(mArtist))
+        if (TextUtils.isEmpty(mArtist))
           mArtist = value.trim();
       } else if (name.equalsIgnoreCase("album")) {
         mAlbum = value.trim();
@@ -405,7 +405,7 @@ public class MediaScanner {
 
       ContentValues values = toValues();
       String title = values.getAsString(MediaStore.MediaColumns.TITLE);
-      if (StringUtils.isBlank(title)) {
+      if (TextUtils.isEmpty(title)) {
         title = values.getAsString(MediaStore.MediaColumns.DATA);
         int lastSlash = title.lastIndexOf('/');
         if (lastSlash >= 0) {
