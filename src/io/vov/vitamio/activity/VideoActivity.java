@@ -916,7 +916,6 @@ public class VideoActivity extends Activity implements MediaController.MediaPlay
 	@Override
 	public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		if (vPlayer != null) {
-			vPlayer.setDisplay(holder);
 			setVideoLayout();
 		}
 	}
