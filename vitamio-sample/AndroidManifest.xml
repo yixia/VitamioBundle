@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.vov.vitamio.demo"
-    android:versionCode="2"
-    android:versionName="0.0." >
+    android:versionCode="002"
+    android:versionName="0.0.2" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -51,6 +51,27 @@
         <activity
             android:name=".MediaMetadataRetrieverDemo"
             android:label="Media/MediaMetadata" >
+        </activity>
+        <activity
+            android:name=".VideoSubtitleDemo"
+            android:label="@string/title_activity_video_subtitle_demo" >
+        </activity>
+        <activity
+            android:name=".MediaPlayerSubtitle"
+            android:label="@string/title_activity_media_player_subtitle" >
+        </activity>
+        <activity
+            android:name=".VideoViewSubtitle"
+            android:label="@string/title_activity_video_view_subtitle" >
+        </activity>
+        <activity
+            android:name=".VideoSubtitleList"
+            android:label="@string/title_activity_video_subtitle_list" >
+        </activity>
+        <activity
+            android:name=".VideoBuffer"
+            android:label="@string/title_activity_video_buffer" >
+           
         </activity>
     </application>
 
