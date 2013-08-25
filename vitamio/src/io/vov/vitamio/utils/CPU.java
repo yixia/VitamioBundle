@@ -97,14 +97,16 @@ public class CPU {
 			}
 
 			val = cpuinfo.get("Processor");
-			if (val != null && val.contains("(v7l)") || val.contains("ARMv7")) {
-				hasARMv6 = true;
-				hasARMv7 = true;
-			}
-			if (val != null && val.contains("(v6l)") || val.contains("ARMv6")) {
-				hasARMv6 = true;
-				hasARMv7 = false;
-			}
+			if (val != null) {
+                		if (val.contains("(v7l)") || val.contains("ARMv7")) {
+                    			hasARMv6 = true;
+                    			hasARMv7 = true;
+                		}
+                		if (val.contains("(v6l)") || val.contains("ARMv6")) {
+			                hasARMv6 = true;
+                    			hasARMv7 = false;
+                		}
+            		}
 
 			if (hasARMv6)
 				cachedFeature |= FEATURE_ARM_V6;
