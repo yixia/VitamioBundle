@@ -24,6 +24,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:text="@string/res_audio" />
+        android:text="@string/res_audio" /> 
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/sub1"
+        android:background="@drawable/mediacontroller_sreen_size_100"
+        android:onClick="changeLayout" />
 
 </RelativeLayout>
