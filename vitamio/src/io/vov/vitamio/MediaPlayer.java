@@ -40,7 +40,9 @@ import android.view.SurfaceHolder;
 import io.vov.vitamio.utils.FileUtils;
 import io.vov.vitamio.utils.Log;
 
+import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -191,8 +193,8 @@ public class MediaPlayer {
     String LIB_ROOT = Vitamio.getLibraryPath();
     if (preferHWDecoder) {
       if (!NATIVE_OMX_LOADED.get()) {
-        if (Build.VERSION.SDK_INT > 15)
-          loadOMX_native(LIB_ROOT + "libOMX.16.so");
+        if (Build.VERSION.SDK_INT > 17)
+          loadOMX_native(LIB_ROOT + "libOMX.18.so");
         else if (Build.VERSION.SDK_INT > 13)
           loadOMX_native(LIB_ROOT + "libOMX.14.so");
         else if (Build.VERSION.SDK_INT > 10)
@@ -317,7 +319,7 @@ public class MediaPlayer {
    *                               form {@link #setDataSource(FileDescriptor)}.
    */
   public void setDataSource(String path) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
-    _setDataSource(path, null);
+    _setDataSource(path, null, null);
   }
 
   /**
@@ -328,10 +330,10 @@ public class MediaPlayer {
    * @throws IllegalStateException if it is called in an invalid state
    */
   public void setDataSource(Context context, Uri uri) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
-    setDataSource(context, uri, "");
+    setDataSource(context, uri, null);
   }
 
-  public void setDataSource(Context context, Uri uri, String headers) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
+  public void setDataSource(Context context, Uri uri, Map<String, String> headers) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
     if (context == null || uri == null)
       throw new IllegalArgumentException();
     String scheme = uri.getScheme();
@@ -350,27 +352,68 @@ public class MediaPlayer {
     } catch (Exception e) {
       closeFD();
     }
-    _setDataSource(uri.toString(), headers);
+    setDataSource(uri.toString(), headers);
   }
-
+  
   /**
-   * Sets the data source as a content Uri.
+   * Sets the data source (file-path or http/rtsp URL) to use.
    *
-   * @param context the Context to use when resolving the Uri
-   * @param uri     the Content URI of the data you want to play
-   * @param headers the headers to be sent together with the request for the data
+   * @param path the path of the file, or the http/rtsp URL of the stream you want to play
+   * @param headers the headers associated with the http request for the stream you want to play
    * @throws IllegalStateException if it is called in an invalid state
    */
-  public void setDataSource(Context context, Uri uri, Map<String, String> headers) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
-    StringBuffer headerBuffer = null;
-    if (headers != null) {
-      headerBuffer = new StringBuffer();
-      for (Map.Entry<String, String> entry : headers.entrySet()) {
-        headerBuffer.append(entry.getKey()).append(":").append(entry.getValue()).append("\r\n");
+  public void setDataSource(String path, Map<String, String> headers)
+          throws IOException, IllegalArgumentException, SecurityException, IllegalStateException
+  {
+      String[] keys = null;
+      String[] values = null;
+
+      if (headers != null) {
+          keys = new String[headers.size()];
+          values = new String[headers.size()];
+
+          int i = 0;
+          for (Map.Entry<String, String> entry: headers.entrySet()) {
+              keys[i] = entry.getKey();
+              values[i] = entry.getValue();
+              ++i;
+          }
       }
-    }
-    setDataSource(context, uri, headerBuffer == null ? null : headerBuffer.toString());
-    return;
+      setDataSource(path, keys, values);
+  }
+  
+  /**
+   * Sets the data source (file-path or http/rtsp URL) to use.
+   *
+   * @param path the path of the file, or the http/rtsp URL of the stream you want to play
+   * @param keys   AVOption key
+   * @param values AVOption value
+   * @throws IllegalStateException if it is called in an invalid state
+   */
+	public void setDataSource(String path, String[] keys, String[] values) throws IOException, IllegalArgumentException, SecurityException, IllegalStateException {
+		final Uri uri = Uri.parse(path);
+		if ("file".equals(uri.getScheme())) {
+			path = uri.getPath();
+		}
+
+		final File file = new File(path);
+		if (file.exists()) {
+			FileInputStream is = new FileInputStream(file);
+			FileDescriptor fd = is.getFD();
+			setDataSource(fd);
+			is.close();
+		} else {
+			_setDataSource(path, keys, values);
+		}
+	}
+
+  /**
+   * Set the segments source url
+   * @param segments the array path of the url e.g. Segmented video list
+   * @param cacheDir e.g. getCacheDir().toString()
+   */
+  public void setDataSegments(String[] uris, String cacheDir) {
+  	_setDataSegmentsSource(uris, cacheDir);
   }
 
   public void setOnHWRenderFailedListener(OnHWRenderFailedListener l) {
@@ -382,10 +425,11 @@ public class MediaPlayer {
    *
    * @param path    the path of the file, or the http/rtsp/mms URL of the stream you
    *                want to play
-   * @param headers protocol headers, e.g. HTTP header
+   * @param keys   AVOption key
+   * @param values AVOption value
    * @throws IllegalStateException if it is called in an invalid state
    */
-  public native void _setDataSource(String path, String headers) throws IOException, IllegalArgumentException, IllegalStateException;
+  private native void _setDataSource(String path, String[] keys, String[] values) throws IOException, IllegalArgumentException, IllegalStateException;
 
   /**
    * Sets the data source (FileDescriptor) to use. It is the caller's
@@ -396,6 +440,13 @@ public class MediaPlayer {
    * @throws IllegalStateException if it is called in an invalid state
    */
   public native void setDataSource(FileDescriptor fd) throws IOException, IllegalArgumentException, IllegalStateException;
+  
+  /**
+   * Set the segments source url
+   * @param segments the array path of the url
+   * @param cacheDir e.g. getCacheDir().toString()
+   */
+  private native void _setDataSegmentsSource(String[] segments, String cacheDir);
 
   /**
    * Prepares the player for playback, synchronously.
