@@ -8,7 +8,7 @@ Version 4.1.0 *(2013-08-30)*
  * Support x86 hardware.
  * Improve hardware decoder.
  * Improve adaptive bitrate streaming.
- * Support most FFmpeg AVOptions, e.g. support rmtp AVOptions.
+ * Support most FFmpeg AVOptions, e.g. support rtmp AVOptions.
  * Improve MediaPlayer API, e.g. support playback segment video list.
 
 Version 4.0.1 *(2013-07-22)*
