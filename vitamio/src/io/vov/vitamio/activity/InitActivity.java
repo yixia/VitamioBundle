@@ -51,7 +51,7 @@ public class InitActivity extends Activity {
 
       @Override
       protected Boolean doInBackground(Object... params) {
-        return Vitamio.initialize(InitActivity.this);
+        return Vitamio.initialize(InitActivity.this, R.raw.libarm);
       }
 
       @Override

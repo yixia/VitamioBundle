@@ -9,8 +9,8 @@ Upgrade from 3.0
 
 You don't need to change anything once 4.x is finally released. But if you want to use it right now, warnnings below:
 
-1. If you use RGBA\_8888 surface to render video, you use the VideoView from Vitamio, nothing to do. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView. If you use RGB\_565 surface render video, you must add `getHolder().setFormat(PixelFormat.RGB_565)` and `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)`
-
+1. If you use RGBA\_8888 surface to render video, you use the VideoView from Vitamio, nothing to do. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView. If you use RGB\_565 surface render video, you must add `getHolder().setFormat(PixelFormat.RGB_565)` and `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)`.
+2. Vitamio 4.1.0 support full version and online version. If you wanna playback online video, you can copy `dist/libarm_online.so` to `vitamio/res/raw/libarm.so`, otherwise use `dist/libarm_full.so`.
 
 
 New features
@@ -38,4 +38,6 @@ License
 -------
 
 Please refer [License](http://www.vitamio.org/en/License)
+
+
 
