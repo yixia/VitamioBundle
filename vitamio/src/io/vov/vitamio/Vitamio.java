@@ -26,6 +26,7 @@ import io.vov.vitamio.utils.IOUtils;
 import io.vov.vitamio.utils.Log;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -42,12 +43,16 @@ import java.util.List;
  * Don't modify this class, or the full Vitamio library may be broken.
  */
 public class Vitamio {
-  private static final String[] LIBS_CODECS = {"libffmpeg.so", "libOMX.9.so", "libOMX.11.so", "libOMX.14.so", "libOMX.16.so"};
+  private static final String[] LIBS_ARM_CODECS = {"libvvo.7.so", "libvvo.8.so", "libffmpeg.so", "libOMX.9.so", "libOMX.11.so", "libOMX.14.so", "libOMX.18.so"};
+  private static final String[] LIBS_X86_CODECS = {"libffmpeg.so", "libOMX.9.so", "libOMX.14.so", "libOMX.18.so"};
+  private static final String[] LIBS_MIPS_CODECS = {"libffmpeg.so", "libOMX.14.so"};
   private static final String[] LIBS_PLAYER = {"libvplayer.so"};
   private static final String[] LIBS_SCANNER = {"libvscanner.so"};
-  private static final String[] LIBS_AV = {"libvao.0.so", "libvvo.0.so", "libvvo.7.so", "libvvo.8.so", "libvvo.9.so", "libvvo.j.so"};
+  private static final String[] LIBS_AV = {"libvao.0.so", "libvvo.0.so", "libvvo.9.so", "libvvo.j.so"};
   private static final String LIBS_LOCK = ".lock";
   private static final int VITAMIO_NOT_SUPPORTED = -1;
+  private static final int VITAMIO_MIPS = 40;
+  private static final int VITAMIO_X86 = 50;
   private static final int VITAMIO_ARMV6 = 60;
   private static final int VITAMIO_ARMV6_VFP = 61;
   private static final int VITAMIO_ARMV7_VFPV3 = 70;
@@ -63,9 +68,13 @@ public class Vitamio {
     else if ((cpu & CPU.FEATURE_ARM_VFP) > 0 && (cpu & CPU.FEATURE_ARM_V6) > 0)
       vitamioType = VITAMIO_ARMV6_VFP;
     else if ((cpu & CPU.FEATURE_ARM_V6) > 0)
-      vitamioType = VITAMIO_ARMV6;
+    	vitamioType = VITAMIO_ARMV6;
+    else if ((cpu & CPU.FEATURE_X86) > 0)
+    	vitamioType = VITAMIO_X86;
+    else if ((cpu & CPU.FEATURE_MIPS) > 0) 
+    	vitamioType = VITAMIO_MIPS;
     else
-      vitamioType = VITAMIO_NOT_SUPPORTED;
+    	vitamioType = VITAMIO_NOT_SUPPORTED;
   }
 
   private static String vitamioPackage;
@@ -116,18 +125,18 @@ public class Vitamio {
           }
         }
         File lock = new File(getLibraryPath() + LIBS_LOCK);
-        FileReader fr = null;
+        BufferedReader buffer = null; 
         try {
-          fr = new FileReader(lock);
+          buffer = new BufferedReader(new FileReader(lock));  
           int appVersion = ContextUtils.getVersionCode(ctx);
-          int libVersion = fr.read();
+          int libVersion = Integer.valueOf(buffer.readLine());  
           Log.i("isNativeLibsInited, APP VERSION: %d, Vitamio Library version: %d", appVersion, libVersion);
           if (libVersion == appVersion)
             return true;
         } catch (IOException e) {
           Log.e("isNativeLibsInited", e);
         } finally {
-          IOUtils.closeSilently(fr);
+          IOUtils.closeSilently(buffer);
         }
       }
     }
@@ -148,7 +157,26 @@ public class Vitamio {
 
   private static final List<String> getRequiredLibs() {
     List<String> libs = new ArrayList<String>();
-    for (String[] libArray : new String[][]{LIBS_CODECS, LIBS_PLAYER, LIBS_SCANNER, LIBS_AV}) {
+    String[][] vitamioLibs = null;
+    switch (vitamioType) {
+		case VITAMIO_ARMV6:
+		case VITAMIO_ARMV6_VFP:
+		case VITAMIO_ARMV7_VFPV3:
+		case VITAMIO_ARMV7_NEON:
+			vitamioLibs = new String[][]{LIBS_ARM_CODECS, LIBS_PLAYER, LIBS_SCANNER, LIBS_AV};
+			break;
+		case VITAMIO_X86:
+			vitamioLibs = new String[][]{LIBS_X86_CODECS, LIBS_PLAYER, LIBS_SCANNER, LIBS_AV};
+			break;
+		case VITAMIO_MIPS:
+			vitamioLibs = new String[][]{LIBS_MIPS_CODECS, LIBS_PLAYER, LIBS_SCANNER, LIBS_AV};
+			break;
+		default:
+			break;
+		}
+    if (vitamioLibs == null)
+    	return libs;
+    for (String[] libArray : vitamioLibs) {
       for (String lib : libArray)
         libs.add(lib);
     }
@@ -171,7 +199,7 @@ public class Vitamio {
     try {
       lock.createNewFile();
       fw = new FileWriter(lock);
-      fw.write(version);
+      fw.write(String.valueOf(version));
       return true;
     } catch (IOException e) {
       Log.e("Error creating lock file", e);

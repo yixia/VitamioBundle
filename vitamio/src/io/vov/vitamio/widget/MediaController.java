@@ -81,7 +81,7 @@ public class MediaController extends FrameLayout {
   private int mAnimStyle;
   private View mAnchor;
   private View mRoot;
-  private ProgressBar mProgress;
+  private SeekBar mProgress;
   private TextView mEndTime, mCurrentTime;
   private TextView mFileName;
   private OutlineTextView mInfoView;
@@ -231,7 +231,7 @@ public class MediaController extends FrameLayout {
       mPauseButton.setOnClickListener(mPauseListener);
     }
 
-    mProgress = (ProgressBar) v.findViewById(R.id.mediacontroller_seekbar);
+    mProgress = (SeekBar) v.findViewById(R.id.mediacontroller_seekbar);
     if (mProgress != null) {
       if (mProgress instanceof SeekBar) {
         SeekBar seeker = (SeekBar) mProgress;

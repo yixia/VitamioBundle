@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+Version 4.1.0 *(2013-08-30)*
+---------------------------
+
+ * Support full version, online version.
+ * Support x86 hardware.
+ * Improve hardware decoder.
+ * Improve adaptive bitrate streaming.
+ * Support most FFmpeg AVOptions, e.g. support rtmp AVOptions.
+ * Improve MediaPlayer API, e.g. support playback segment video list.
+
 Version 4.0.1 *(2013-07-22)*
 ---------------------------
 
@@ -31,5 +41,5 @@ Version 3.0.0 *(2012-10-23)*
 ----------------------------
 
  * Support ARMV6+.
- * Supportn package it into your application without the need to
+ * Support package it into your application without the need to
    let users download a seperated Vitamio Plugin.

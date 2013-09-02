@@ -18,6 +18,7 @@ package io.vov.vitamio.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ public class VideoViewSubtitle extends Activity {
 	private String subtitle_path = "";
 	private VideoView mVideoView;
 	private TextView mSubtitleView;
+	private long mPosition = 0;
+	private int mVideoLayout = 0;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -41,7 +44,6 @@ public class VideoViewSubtitle extends Activity {
 			return;
 		setContentView(R.layout.subtitle2);
 		mVideoView = (VideoView) findViewById(R.id.surface_view);
-
 		mSubtitleView = (TextView) findViewById(R.id.subtitle_view);
 
 		if (path == "") {
@@ -77,10 +79,54 @@ public class VideoViewSubtitle extends Activity {
 
 				@Override
 				public void onTimedTextUpdate(byte[] pixels, int width, int height) {
-					
+
 				}
 			});
 		}
-
 	}
+
+	@Override
+	protected void onPause() {
+		mPosition = mVideoView.getCurrentPosition();
+		mVideoView.stopPlayback();
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		if (mPosition > 0) {
+			mVideoView.seekTo(mPosition);
+			mPosition = 0;
+		}
+		super.onResume();
+		mVideoView.start();
+	}
+
+	public void changeLayout(View view) {
+		mVideoLayout++;
+		if (mVideoLayout == 4) {
+			mVideoLayout = 0;
+		}
+		switch (mVideoLayout) {
+		case 0:
+			mVideoLayout = VideoView.VIDEO_LAYOUT_ORIGIN;
+			view.setBackgroundResource(R.drawable.mediacontroller_sreen_size_100);
+			break;
+		case 1:
+			mVideoLayout = VideoView.VIDEO_LAYOUT_SCALE;
+			view.setBackgroundResource(R.drawable.mediacontroller_screen_fit);
+			break;
+		case 2:
+			mVideoLayout = VideoView.VIDEO_LAYOUT_STRETCH;
+			view.setBackgroundResource(R.drawable.mediacontroller_screen_size);
+			break;
+		case 3:
+			mVideoLayout = VideoView.VIDEO_LAYOUT_ZOOM;
+			view.setBackgroundResource(R.drawable.mediacontroller_sreen_size_crop);
+
+			break;
+		}
+		mVideoView.setVideoLayout(mVideoLayout, 0);
+	}
+
 }
