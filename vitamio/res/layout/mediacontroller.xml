@@ -2,11 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="74dip"
-    android:layout_alignParentBottom="true"
-    android:layout_marginBottom="0.0dip"
-    android:layout_marginLeft="0.0dip"
-    android:layout_marginRight="0.0dip"
-    android:background="@drawable/mediacontroller_bg"
+	android:background="#AA000000"
     android:orientation="horizontal" >
 
     <ImageButton
