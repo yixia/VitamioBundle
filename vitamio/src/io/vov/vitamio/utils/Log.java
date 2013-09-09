@@ -15,7 +15,7 @@
  */
 package io.vov.vitamio.utils;
 
-import com.yixia.vitamio.library.BuildConfig;
+import io.vov.vitamio.BuildConfig;
 
 import java.util.MissingFormatArgumentException;
 

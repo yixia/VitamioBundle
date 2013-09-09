@@ -35,8 +35,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.yixia.vitamio.library.R;
-
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnCompletionListener;
@@ -48,6 +46,7 @@ import io.vov.vitamio.MediaPlayer.OnTimedTextListener;
 import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
 import io.vov.vitamio.MediaPlayer.TrackInfo;
 import io.vov.vitamio.Metadata;
+import io.vov.vitamio.R;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.Log;
 

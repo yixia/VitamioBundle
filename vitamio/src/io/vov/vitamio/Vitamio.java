@@ -18,8 +18,6 @@ package io.vov.vitamio;
 
 import android.content.Context;
 
-import com.yixia.vitamio.library.R;
-
 import io.vov.vitamio.utils.CPU;
 import io.vov.vitamio.utils.ContextUtils;
 import io.vov.vitamio.utils.IOUtils;
@@ -135,6 +133,8 @@ public class Vitamio {
             return true;
         } catch (IOException e) {
           Log.e("isNativeLibsInited", e);
+        } catch (NumberFormatException e) {
+        	Log.e("isNativeLibsInited", e);
         } finally {
           IOUtils.closeSilently(buffer);
         }

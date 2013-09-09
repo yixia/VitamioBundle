@@ -18,7 +18,6 @@
 package io.vov.vitamio;
 
 import android.util.SparseArray;
-import com.yixia.vitamio.library.BuildConfig;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Locale;
