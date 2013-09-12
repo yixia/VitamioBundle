@@ -52,6 +52,7 @@ import io.vov.vitamio.utils.Log;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Displays a video file. The VideoView class can load images from various
@@ -202,6 +203,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private boolean mCanSeekBack;
   private boolean mCanSeekForward;
   private Context mContext;
+  private Map<String, String> mHeaders;
   private OnCompletionListener mCompletionListener = new OnCompletionListener() {
     public void onCompletion(MediaPlayer mp) {
       Log.d("onCompletion");
@@ -411,7 +413,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaPlayer.setOnInfoListener(mInfoListener);
       mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
       mMediaPlayer.setOnTimedTextListener(mTimedTextListener);
-      mMediaPlayer.setDataSource(mContext, mUri);
+      mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
       mMediaPlayer.setDisplay(mSurfaceHolder);
       mMediaPlayer.setVideoChroma(mVideoChroma == MediaPlayer.VIDEOCHROMA_RGB565 ? MediaPlayer.VIDEOCHROMA_RGB565 : MediaPlayer.VIDEOCHROMA_RGBA);
       mMediaPlayer.setScreenOnWhilePlaying(true);
@@ -649,6 +651,14 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public void setVideoChroma(int chroma) {
     getHolder().setFormat(chroma == MediaPlayer.VIDEOCHROMA_RGB565 ? PixelFormat.RGB_565 : PixelFormat.RGBA_8888); // PixelFormat.RGB_565
     mVideoChroma = chroma;
+  }
+  
+  /**
+   * set AVOptions
+   * @param headers
+   */
+  public void setVideoHeaders(Map<String, String> headers) {
+  	mHeaders = headers;
   }
 
   public void setVideoQuality(int quality) {
