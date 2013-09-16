@@ -52,6 +52,7 @@ import io.vov.vitamio.utils.Log;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Displays a video file. The VideoView class can load images from various
@@ -184,9 +185,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private int mVideoWidth;
   private int mVideoHeight;
   private float mVideoAspectRatio;
+  private int mVideoChroma = MediaPlayer.VIDEOCHROMA_RGBA;
   private int mSurfaceWidth;
   private int mSurfaceHeight;
   private MediaController mMediaController;
+  private View mMediaBufferingIndicator;
   private OnCompletionListener mOnCompletionListener;
   private OnPreparedListener mOnPreparedListener;
   private OnErrorListener mOnErrorListener;
@@ -200,6 +203,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private boolean mCanSeekBack;
   private boolean mCanSeekForward;
   private Context mContext;
+  private Map<String, String> mHeaders;
   private OnCompletionListener mCompletionListener = new OnCompletionListener() {
     public void onCompletion(MediaPlayer mp) {
       Log.d("onCompletion");
@@ -251,12 +255,16 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       if (mOnInfoListener != null) {
         mOnInfoListener.onInfo(mp, what, extra);
       } else if (mMediaPlayer != null) {
-        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START)
-          mMediaPlayer.pause();
-        else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END)
-          mMediaPlayer.start();
+        if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+        	mMediaPlayer.pause();
+          if (mMediaBufferingIndicator != null)
+            mMediaBufferingIndicator.setVisibility(View.VISIBLE);
+        } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+        	mMediaPlayer.start();
+        	if (mMediaBufferingIndicator != null)
+            mMediaBufferingIndicator.setVisibility(View.GONE);
+        }
       }
-
       return true;
     }
   };
@@ -405,8 +413,9 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaPlayer.setOnInfoListener(mInfoListener);
       mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);
       mMediaPlayer.setOnTimedTextListener(mTimedTextListener);
-      mMediaPlayer.setDataSource(mContext, mUri);
+      mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
       mMediaPlayer.setDisplay(mSurfaceHolder);
+      mMediaPlayer.setVideoChroma(mVideoChroma == MediaPlayer.VIDEOCHROMA_RGB565 ? MediaPlayer.VIDEOCHROMA_RGB565 : MediaPlayer.VIDEOCHROMA_RGBA);
       mMediaPlayer.setScreenOnWhilePlaying(true);
       mMediaPlayer.prepareAsync();
       mCurrentState = STATE_PREPARING;
@@ -431,6 +440,12 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaController.hide();
     mMediaController = controller;
     attachMediaController();
+  }
+  
+  public void setMediaBufferingIndicator(View mediaBufferingIndicator) {
+    if (mMediaBufferingIndicator != null)
+      mMediaBufferingIndicator.setVisibility(View.GONE);
+    mMediaBufferingIndicator = mediaBufferingIndicator;
   }
 
   private void attachMediaController() {
@@ -628,17 +643,29 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public float getVideoAspectRatio() {
     return mVideoAspectRatio;
   }
+  
+  /**
+   * Must set before {@link #setVideoURI}
+   * @param chroma
+   */
+  public void setVideoChroma(int chroma) {
+    getHolder().setFormat(chroma == MediaPlayer.VIDEOCHROMA_RGB565 ? PixelFormat.RGB_565 : PixelFormat.RGBA_8888); // PixelFormat.RGB_565
+    mVideoChroma = chroma;
+  }
+  
+  /**
+   * set AVOptions
+   * @param headers
+   */
+  public void setVideoHeaders(Map<String, String> headers) {
+  	mHeaders = headers;
+  }
 
   public void setVideoQuality(int quality) {
     if (mMediaPlayer != null)
       mMediaPlayer.setVideoQuality(quality);
   }
   
-  public void setVideoChroma(int chroma) {
-  	if (mMediaPlayer != null)
-  		mMediaPlayer.setVideoChroma(chroma);
-  }
-
   public void setBufferSize(int bufSize) {
     if (mMediaPlayer != null)
       mMediaPlayer.setBufferSize(bufSize);
