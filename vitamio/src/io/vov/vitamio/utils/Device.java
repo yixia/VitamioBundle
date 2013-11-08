@@ -44,7 +44,10 @@ public class Device {
   @SuppressLint("NewApi")
   public static String getIdentifiers(Context ctx) {
     StringBuilder sb = new StringBuilder();
-    sb.append(getPair("serial", Build.SERIAL));
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO)
+    	sb.append(getPair("serial", Build.SERIAL));
+    else
+    	sb.append(getPair("serial", "No Serial"));
     sb.append(getPair("android_id", Settings.Secure.getString(ctx.getContentResolver(), Settings.Secure.ANDROID_ID)));
     TelephonyManager tel = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
     sb.append(getPair("sim_country_iso", tel.getSimCountryIso()));
