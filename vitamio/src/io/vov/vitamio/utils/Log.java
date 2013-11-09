@@ -20,7 +20,7 @@ import io.vov.vitamio.BuildConfig;
 import java.util.MissingFormatArgumentException;
 
 public class Log {
-	public static final String TAG = "Vitamio[Player]";
+	public static final String TAG = "Livetime2[StreamPlayer]";
 
 	public static void i(String msg, Object... args) {
 		try {

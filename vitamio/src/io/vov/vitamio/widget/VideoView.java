@@ -34,7 +34,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnCompletionListener;
@@ -51,6 +50,7 @@ import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.Log;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -373,11 +373,19 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public void setVideoPath(String path) {
     setVideoURI(Uri.parse(path));
   }
+  
+  public void setVideoPath(String path, HashMap<String, String> headers) {
+	    setVideoURI(Uri.parse(path), headers);
+	  }
 
   public void setVideoURI(Uri uri) {
+	  setVideoURI(uri, null);
+  }
+  
+  public void setVideoURI(Uri uri, HashMap<String, String> headers) {
     mUri = uri;
     mSeekWhenPrepared = 0;
-    openVideo();
+    openVideo(headers);
     requestLayout();
     invalidate();
   }
@@ -393,8 +401,15 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   }
 
   private void openVideo() {
+	  openVideo(null);
+  }
+  
+  private void openVideo(HashMap<String, String> headers) {
     if (mUri == null || mSurfaceHolder == null || !Vitamio.isInitialized(mContext))
       return;
+    
+    if (headers != null)
+    	mHeaders = headers;
 
     Intent i = new Intent("com.android.music.musicservicecommand");
     i.putExtra("command", "pause");

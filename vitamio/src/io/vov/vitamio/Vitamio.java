@@ -133,8 +133,6 @@ public class Vitamio {
             return true;
         } catch (IOException e) {
           Log.e("isNativeLibsInited", e);
-        } catch (NumberFormatException e) {
-        	Log.e("isNativeLibsInited", e);
         } finally {
           IOUtils.closeSilently(buffer);
         }

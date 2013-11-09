@@ -30,6 +30,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import android.util.Base64;
+
 public class Crypto {
 	private Cipher ecipher;
 
