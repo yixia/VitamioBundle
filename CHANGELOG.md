@@ -6,7 +6,7 @@ Version 4.1.1 *(2013-09-16)*
 
  * Improve HLS playback.
  * VideoView support AVOptions.
- * Fix VideoView switching RGB\_565 or RGBA\_8888 to video rendering.
+ * Support VideoView switching RGB\_565 or RGBA\_8888 to video rendering.
  * Fix other bug.
 
 Version 4.1.0 *(2013-08-30)*
