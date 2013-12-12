@@ -252,7 +252,6 @@ public class MediaController extends FrameLayout {
       if (mProgress instanceof SeekBar) {
         SeekBar seeker = (SeekBar) mProgress;
         seeker.setOnSeekBarChangeListener(mSeekListener);
-        seeker.setThumbOffset(1);
       }
       mProgress.setMax(1000);
     }
@@ -303,14 +302,6 @@ public class MediaController extends FrameLayout {
     mInfoView = v;
   }
 
-  private void disableUnsupportedButtons() {
-    try {
-      if (mPauseButton != null && !mPlayer.canPause())
-        mPauseButton.setEnabled(false);
-    } catch (IncompatibleClassChangeError ex) {
-    }
-  }
-
   /**
    * <p>
    * Change the animation style resource for this controller.
@@ -340,7 +331,6 @@ public class MediaController extends FrameLayout {
     if (!mShowing && mAnchor != null && mAnchor.getWindowToken() != null) {
       if (mPauseButton != null)
         mPauseButton.requestFocus();
-      disableUnsupportedButtons();
 
       if (mFromXml) {
         setVisibility(View.VISIBLE);
@@ -484,7 +474,6 @@ public class MediaController extends FrameLayout {
       mPauseButton.setEnabled(enabled);
     if (mProgress != null)
       mProgress.setEnabled(enabled);
-    disableUnsupportedButtons();
     super.setEnabled(enabled);
   }
 
@@ -510,12 +499,6 @@ public class MediaController extends FrameLayout {
     boolean isPlaying();
 
     int getBufferPercentage();
-
-    boolean canPause();
-
-    boolean canSeekBackward();
-
-    boolean canSeekForward();
   }
 
 }
