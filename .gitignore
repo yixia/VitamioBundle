@@ -18,7 +18,7 @@ local.properties
 
 # Eclipse project files
 .classpath
-.project
+#.project
 
 # IntelliJ IDEA files
 *.iml
