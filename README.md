@@ -10,8 +10,8 @@ Upgrade from 3.0
 You don't need to change anything once 4.x is finally released. But if you want to use it right now, warnnings below:
 
 1. Vitamio support RGBA\_8888 and RGB\_565 surface to render video, use RGBA\_8888 as default. if you use the VideoView from Vitamio, you can use `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)` to render video. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView.
-2. Vitamio 4.1.0 support full version and online version. If you wanna playback online video, you can copy `dist/libarm_online.so` to `vitamio/res/raw/libarm.so`, otherwise use `dist/libarm_full.so`.
 
+2. The dist folder include arm_x86, arm_x86_mips, online_arm, you can select difference arch copy to Vitamio.
 
 New features
 ------------
@@ -33,11 +33,15 @@ Only few important features are listed here, we have fix many bugs and may intro
 13. Enhance the hardware decoding in Android 16+.
 14. Support ARMV6 CPU, may have some bugs.
 
+How to use
+----------
+
+please see [the website](https://github.com/yixia/VitamioBundle/wiki)
 
 License
 -------
 
-Please refer [License](http://www.vitamio.org/en/License)
+Please see [License](http://www.vitamio.org/en/License)
 
 
 
