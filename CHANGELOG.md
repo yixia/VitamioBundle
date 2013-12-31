@@ -1,13 +1,25 @@
 Change Log
 ==========
 
-Version 4.1.1 *(2013-09-16)*
+version 4.2.0 *(2013-12-31)*
 ---------------------------
 
- * Improve HLS playback.
- * VideoView support AVOptions.
- * Support VideoView switching RGB\_565 or RGBA\_8888 to video rendering.
- * Fix other bug.
+ * Support MIPS architecture.
+ * Customize FFmpeg, You can build FFmpeg by yourself.
+ * Improve hardware decoder, support more devices.
+ * Support HTTP Live Streaming download while playing.
+ * Support AES-128 encrypt for HTTP Live Streaming.
+ * Improve seek operation.
+ * Fixed many bugs.
+
+
+version 4.1.1 *(2013-09-16)*
+---------------------------
+
+ * improve hls playback.
+ * videoview support avoptions.
+ * support videoview switching rgb\_565 or rgba\_8888 to video rendering.
+ * fix other bug.
 
 Version 4.1.0 *(2013-08-30)*
 ---------------------------
