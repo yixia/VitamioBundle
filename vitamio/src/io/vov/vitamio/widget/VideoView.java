@@ -35,6 +35,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import io.vov.vitamio.MediaFormat;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnBufferingUpdateListener;
 import io.vov.vitamio.MediaPlayer.OnCompletionListener;
@@ -45,7 +46,6 @@ import io.vov.vitamio.MediaPlayer.OnSeekCompleteListener;
 import io.vov.vitamio.MediaPlayer.OnTimedTextListener;
 import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
 import io.vov.vitamio.MediaPlayer.TrackInfo;
-import io.vov.vitamio.Metadata;
 import io.vov.vitamio.R;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.Log;
@@ -96,18 +96,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mTargetState = STATE_PLAYING;
       
       // Get the capabilities of the player for this stream
-      Metadata data = mp.getMetadata();
-
-      if (data != null) {
-          mCanPause = !data.has(Metadata.PAUSE_AVAILABLE)
-                  || data.getBoolean(Metadata.PAUSE_AVAILABLE);
-          mCanSeekBack = !data.has(Metadata.SEEK_BACKWARD_AVAILABLE)
-                  || data.getBoolean(Metadata.SEEK_BACKWARD_AVAILABLE);
-          mCanSeekForward = !data.has(Metadata.SEEK_FORWARD_AVAILABLE)
-                  || data.getBoolean(Metadata.SEEK_FORWARD_AVAILABLE);
-      } else {
-          mCanPause = mCanSeekBack = mCanSeekForward = true;
-      }
+      //TODO mCanPause
 
       if (mOnPreparedListener != null)
         mOnPreparedListener.onPrepared(mMediaPlayer);
@@ -158,6 +147,8 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
     public void surfaceCreated(SurfaceHolder holder) {
       mSurfaceHolder = holder;
+      // Dont forgot this value before Android 2.3
+      mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
       if (mMediaPlayer != null && mCurrentState == STATE_SUSPEND && mTargetState == STATE_RESUME) {
         mMediaPlayer.setDisplay(mSurfaceHolder);
         resume();
@@ -199,9 +190,6 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private OnBufferingUpdateListener mOnBufferingUpdateListener;
   private int mCurrentBufferPercentage;
   private long mSeekWhenPrepared; // recording the seek position while preparing
-  private boolean mCanPause;
-  private boolean mCanSeekBack;
-  private boolean mCanSeekForward;
   private Context mContext;
   private Map<String, String> mHeaders;
   private OnCompletionListener mCompletionListener = new OnCompletionListener() {
@@ -369,7 +357,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public boolean isValid() {
     return (mSurfaceHolder != null && mSurfaceHolder.getSurface().isValid());
   }
-
+ 
   public void setVideoPath(String path) {
     setVideoURI(Uri.parse(path));
   }
@@ -688,7 +676,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaPlayer.setMetaEncoding(encoding);
   }
 
-  public SparseArray<String> getAudioTrackMap(String encoding) {
+  public SparseArray<MediaFormat> getAudioTrackMap(String encoding) {
     if (mMediaPlayer != null)
       return mMediaPlayer.findTrackFromTrackInfo(TrackInfo.MEDIA_TRACK_TYPE_AUDIO, mMediaPlayer.getTrackInfo(encoding));
     return null;
@@ -743,7 +731,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     return -1;
   }
 
-  public SparseArray<String> getSubTrackMap(String encoding) {
+  public SparseArray<MediaFormat> getSubTrackMap(String encoding) {
     if (mMediaPlayer != null)
       return mMediaPlayer.findTrackFromTrackInfo(TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT, mMediaPlayer.getTrackInfo(encoding));
     return null;
@@ -751,17 +739,5 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
   protected boolean isInPlaybackState() {
     return (mMediaPlayer != null && mCurrentState != STATE_ERROR && mCurrentState != STATE_IDLE && mCurrentState != STATE_PREPARING);
-  }
-
-  public boolean canPause() {
-    return mCanPause;
-  }
-
-  public boolean canSeekBackward() {
-    return mCanSeekBack;
-  }
-
-  public boolean canSeekForward() {
-    return mCanSeekForward;
   }
 }
