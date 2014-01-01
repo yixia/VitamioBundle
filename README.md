@@ -1,8 +1,7 @@
 Vitamio
 ===============
 
-Vitamio for Android
-
+Vitamio is an open multimedia framework for Android and iOS, with full and real hardware accelerated decoder and renderer.
 
 Upgrade from 3.0
 ----------------
