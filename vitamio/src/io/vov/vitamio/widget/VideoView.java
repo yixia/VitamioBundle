@@ -192,6 +192,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private long mSeekWhenPrepared; // recording the seek position while preparing
   private Context mContext;
   private Map<String, String> mHeaders;
+  private int mBufSize;
   private OnCompletionListener mCompletionListener = new OnCompletionListener() {
     public void onCompletion(MediaPlayer mp) {
       Log.d("onCompletion");
@@ -392,7 +393,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     try {
       mDuration = -1;
       mCurrentBufferPercentage = 0;
-      mMediaPlayer = new MediaPlayer(mContext);
+      mMediaPlayer = new MediaPlayer(mContext, false);
       mMediaPlayer.setOnPreparedListener(mPreparedListener);
       mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
       mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -403,6 +404,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaPlayer.setOnTimedTextListener(mTimedTextListener);
       mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
       mMediaPlayer.setDisplay(mSurfaceHolder);
+      mMediaPlayer.setBufferSize(mBufSize);
       mMediaPlayer.setVideoChroma(mVideoChroma == MediaPlayer.VIDEOCHROMA_RGB565 ? MediaPlayer.VIDEOCHROMA_RGB565 : MediaPlayer.VIDEOCHROMA_RGBA);
       mMediaPlayer.setScreenOnWhilePlaying(true);
       mMediaPlayer.prepareAsync();
@@ -655,8 +657,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   }
   
   public void setBufferSize(int bufSize) {
-    if (mMediaPlayer != null)
-      mMediaPlayer.setBufferSize(bufSize);
+  	mBufSize = bufSize;
   }
 
   public boolean isBuffering() {
