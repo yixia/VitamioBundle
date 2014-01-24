@@ -22,18 +22,3 @@ android {
     }
 }
 
-
-task copyNativeLibs(type: Copy) {
-    from(new File(project(':vitamio').getProjectDir(), 'libs')) { include '**/*.so' }
-    into new File(buildDir, 'libs')
-}
-
-tasks.withType(Compile) { compileTask -> compileTask.dependsOn copyNativeLibs }
-
-clean.dependsOn 'cleanCopyNativeLibs'
-
-tasks.withType(com.android.build.gradle.tasks.PackageApplication) { pkgTask ->
-    pkgTask.jniFolders = new HashSet<File>()
-    pkgTask.jniFolders.add(new File(buildDir, 'libs'))
-}
-
