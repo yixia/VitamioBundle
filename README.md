@@ -44,4 +44,4 @@ Please see [License](http://www.vitamio.org/en/License)
 
 
 ## Google+
-Vitamio Developers Community on Google+ [http://goo.gl/fhCDTD}(http://goo.gl/fhCDTD)
+Vitamio Developers Community on Google+ [http://goo.gl/fhCDTD](http://goo.gl/fhCDTD)
