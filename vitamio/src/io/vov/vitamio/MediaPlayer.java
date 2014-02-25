@@ -279,7 +279,7 @@ public class MediaPlayer {
 
   private static native boolean loadFFmpeg_native(String ffmpegPath);
 
-  private native void _setVideoSurface();
+  private native void _setVideoSurface(Surface surface);
 
   /**
    * Sets the SurfaceHolder to use for displaying the video portion of the
@@ -294,7 +294,7 @@ public class MediaPlayer {
     } else {
       mSurfaceHolder = sh;
       mSurface = sh.getSurface();
-      _setVideoSurface();
+      _setVideoSurface(mSurface);
       updateSurfaceScreenOn();
     }
   }
@@ -311,7 +311,7 @@ public class MediaPlayer {
     } else {
       mSurfaceHolder = null;
       mSurface = surface;
-      _setVideoSurface();
+      _setVideoSurface(mSurface);
       updateSurfaceScreenOn();
     }
   }

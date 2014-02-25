@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+version 4.2.1 *(2014-2-25)*
+---------------------------
+
+ * Support `setSurface`, you can use `SurfaceTexture` or `TextureView` render video.
+ * More `MediaMetadataRetriever` API, e.g. `getEmbeddedPicture`, more metadata support.
+ * Support with the cover of MP3 playback.
+ * Fixed HLS multiple requests issue.
+
 version 4.2.0 *(2013-12-31)*
 ---------------------------
 
