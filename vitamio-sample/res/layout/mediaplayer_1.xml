@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/local_video" />
+    
+    <Button
+        android:id="@+id/localvideo_setsurface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/local_video_setsurface" />
 
     <Button
         android:id="@+id/streamvideo"

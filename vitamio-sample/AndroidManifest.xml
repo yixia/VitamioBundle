@@ -46,6 +46,10 @@
             android:label="Media/MediaPlayer" >
         </activity>
         <activity
+            android:name=".MediaPlayerDemo_setSurface"
+            android:label="Media/MediaPlayer" >
+        </activity>
+        <activity
             android:name=".MediaPlayerDemo_Audio"
             android:label="Media/MediaPlayer" >
         </activity>

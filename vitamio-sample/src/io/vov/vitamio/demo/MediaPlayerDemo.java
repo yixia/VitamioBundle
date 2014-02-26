@@ -25,6 +25,7 @@ import android.widget.Button;
 
 public class MediaPlayerDemo extends Activity {
 	private Button mlocalvideo;
+	private Button mlocalvideoSurface;
 	private Button mstreamvideo;
 	private Button mlocalaudio;
 	private Button mresourcesaudio;
@@ -35,6 +36,7 @@ public class MediaPlayerDemo extends Activity {
 	private static final int LOCAL_VIDEO = 4;
 	private static final int STREAM_VIDEO = 5;
 	private static final int RESOURCES_VIDEO = 6;
+	private static final int LOCAL_VIDEO_SURFACE = 7;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -47,6 +49,8 @@ public class MediaPlayerDemo extends Activity {
 
 		mlocalvideo = (Button) findViewById(R.id.localvideo);
 		mlocalvideo.setOnClickListener(mLocalVideoListener);
+		mlocalvideoSurface = (Button) findViewById(R.id.localvideo_setsurface);
+		mlocalvideoSurface.setOnClickListener(mSetSurfaceVideoListener);
 		mstreamvideo = (Button) findViewById(R.id.streamvideo);
 		mstreamvideo.setOnClickListener(mStreamVideoListener);
 	}
@@ -80,6 +84,15 @@ public class MediaPlayerDemo extends Activity {
 		public void onClick(View v) {
 			Intent intent = new Intent(MediaPlayerDemo.this, MediaPlayerDemo_Video.class);
 			intent.putExtra(MEDIA, STREAM_VIDEO);
+			startActivity(intent);
+
+		}
+	};
+	
+	private OnClickListener mSetSurfaceVideoListener = new OnClickListener() {
+		public void onClick(View v) {
+			Intent intent = new Intent(MediaPlayerDemo.this, MediaPlayerDemo_setSurface.class);
+			intent.putExtra(MEDIA, LOCAL_VIDEO_SURFACE);
 			startActivity(intent);
 
 		}
