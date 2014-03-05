@@ -41,7 +41,6 @@ import android.widget.TextView;
 
 import java.lang.reflect.Method;
 
-import io.vov.vitamio.R;
 import io.vov.vitamio.utils.Log;
 import io.vov.vitamio.utils.StringUtils;
 
@@ -237,17 +236,17 @@ public class MediaController extends FrameLayout {
    * @return The controller view.
    */
   protected View makeControllerView() {
-    return ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.mediacontroller, this);
+    return ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(getResources().getIdentifier("mediacontroller", "layout", mContext.getPackageName()), this);
   }
 
   private void initControllerView(View v) {
-    mPauseButton = (ImageButton) v.findViewById(R.id.mediacontroller_play_pause);
+    mPauseButton = (ImageButton) v.findViewById(getResources().getIdentifier("mediacontroller_play_pause", "id", mContext.getPackageName()));
     if (mPauseButton != null) {
       mPauseButton.requestFocus();
       mPauseButton.setOnClickListener(mPauseListener);
     }
 
-    mProgress = (SeekBar) v.findViewById(R.id.mediacontroller_seekbar);
+    mProgress = (SeekBar) v.findViewById(getResources().getIdentifier("mediacontroller_seekbar", "id", mContext.getPackageName()));
     if (mProgress != null) {
       if (mProgress instanceof SeekBar) {
         SeekBar seeker = (SeekBar) mProgress;
@@ -256,9 +255,9 @@ public class MediaController extends FrameLayout {
       mProgress.setMax(1000);
     }
 
-    mEndTime = (TextView) v.findViewById(R.id.mediacontroller_time_total);
-    mCurrentTime = (TextView) v.findViewById(R.id.mediacontroller_time_current);
-    mFileName = (TextView) v.findViewById(R.id.mediacontroller_file_name);
+    mEndTime = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_time_total", "id", mContext.getPackageName()));
+    mCurrentTime = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_time_current", "id", mContext.getPackageName()));
+    mFileName = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_file_name", "id", mContext.getPackageName()));
     if (mFileName != null)
       mFileName.setText(mTitle);
   }
@@ -455,9 +454,9 @@ public class MediaController extends FrameLayout {
       return;
 
     if (mPlayer.isPlaying())
-      mPauseButton.setImageResource(R.drawable.mediacontroller_pause);
+      mPauseButton.setImageResource(getResources().getIdentifier("mediacontroller_pause", "drawable", mContext.getPackageName()));
     else
-      mPauseButton.setImageResource(R.drawable.mediacontroller_play);
+      mPauseButton.setImageResource(getResources().getIdentifier("mediacontroller_play", "drawable", mContext.getPackageName()));
   }
 
   private void doPauseResume() {

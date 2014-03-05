@@ -219,7 +219,11 @@ public class MediaPlayer {
         NATIVE_OMX_LOADED.set(true);
       }
     } else {
-      unloadOMX_native();
+      try {
+        unloadOMX_native();
+      } catch (UnsatisfiedLinkError e) {
+        Log.e("unloadOMX failed %s", e.toString());
+      }
       NATIVE_OMX_LOADED.set(false);
     }
 

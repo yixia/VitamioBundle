@@ -46,7 +46,6 @@ import io.vov.vitamio.MediaPlayer.OnSeekCompleteListener;
 import io.vov.vitamio.MediaPlayer.OnTimedTextListener;
 import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
 import io.vov.vitamio.MediaPlayer.TrackInfo;
-import io.vov.vitamio.R;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.Log;
 
@@ -147,7 +146,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
     public void surfaceCreated(SurfaceHolder holder) {
       mSurfaceHolder = holder;
-      // Dont forgot this value before Android 2.3
+      // this value only use Hardware decoder before Android 2.3
       mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
       if (mMediaPlayer != null && mCurrentState == STATE_SUSPEND && mTargetState == STATE_RESUME) {
         mMediaPlayer.setDisplay(mSurfaceHolder);
@@ -218,9 +217,9 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       }
 
       if (getWindowToken() != null) {
-        int message = framework_err == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK ? R.string.VideoView_error_text_invalid_progressive_playback : R.string.VideoView_error_text_unknown;
+        int message = framework_err == MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK ? getResources().getIdentifier("VideoView_error_text_invalid_progressive_playback", "string", mContext.getPackageName()): getResources().getIdentifier("VideoView_error_text_unknown", "string", mContext.getPackageName());
 
-        new AlertDialog.Builder(mContext).setTitle(R.string.VideoView_error_title).setMessage(message).setPositiveButton(R.string.VideoView_error_button, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(mContext).setTitle(getResources().getIdentifier("VideoView_error_title", "string", mContext.getPackageName())).setMessage(message).setPositiveButton(getResources().getIdentifier("VideoView_error_button", "string", mContext.getPackageName()), new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int whichButton) {
             if (mOnCompletionListener != null)
               mOnCompletionListener.onCompletion(mMediaPlayer);
