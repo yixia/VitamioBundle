@@ -110,12 +110,11 @@ public class MediaPlayerDemo_Video extends Activity implements OnBufferingUpdate
 			mMediaPlayer = new MediaPlayer(this);
 			mMediaPlayer.setDataSource(path);
 			mMediaPlayer.setDisplay(holder);
-			mMediaPlayer.prepare();
+			mMediaPlayer.prepareAsync();
 			mMediaPlayer.setOnBufferingUpdateListener(this);
 			mMediaPlayer.setOnCompletionListener(this);
 			mMediaPlayer.setOnPreparedListener(this);
 			mMediaPlayer.setOnVideoSizeChangedListener(this);
-			mMediaPlayer.getMetadata();
 			setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		} catch (Exception e) {
@@ -124,7 +123,7 @@ public class MediaPlayerDemo_Video extends Activity implements OnBufferingUpdate
 	}
 
 	public void onBufferingUpdate(MediaPlayer arg0, int percent) {
-		Log.d(TAG, "onBufferingUpdate percent:" + percent);
+		// Log.d(TAG, "onBufferingUpdate percent:" + percent);
 
 	}
 
