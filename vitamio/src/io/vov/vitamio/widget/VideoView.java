@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -92,7 +93,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     public void onPrepared(MediaPlayer mp) {
       Log.d("onPrepared");
       mCurrentState = STATE_PREPARED;
-      mTargetState = STATE_PLAYING;
+      // mTargetState = STATE_PLAYING;
       
       // Get the capabilities of the player for this stream
       //TODO mCanPause
@@ -106,9 +107,9 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mVideoAspectRatio = mp.getVideoAspectRatio();
 
       long seekToPosition = mSeekWhenPrepared;
-
       if (seekToPosition != 0)
         seekTo(seekToPosition);
+      
       if (mVideoWidth != 0 && mVideoHeight != 0) {
         setVideoLayout(mVideoLayout, mAspectRatio);
         if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
@@ -146,8 +147,6 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
     public void surfaceCreated(SurfaceHolder holder) {
       mSurfaceHolder = holder;
-      // this value only use Hardware decoder before Android 2.3
-      mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
       if (mMediaPlayer != null && mCurrentState == STATE_SUSPEND && mTargetState == STATE_RESUME) {
         mMediaPlayer.setDisplay(mSurfaceHolder);
         resume();
@@ -158,10 +157,8 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
     public void surfaceDestroyed(SurfaceHolder holder) {
       mSurfaceHolder = null;
-      if (mMediaController != null)
-        mMediaController.hide();
-      if (mCurrentState != STATE_SUSPEND)
-        release(true);
+      if (mMediaController != null) mMediaController.hide();
+      release(true);
     }
   };
   private Uri mUri;
@@ -176,6 +173,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   private int mVideoHeight;
   private float mVideoAspectRatio;
   private int mVideoChroma = MediaPlayer.VIDEOCHROMA_RGBA;
+  private boolean mHardwareDecoder = false;
   private int mSurfaceWidth;
   private int mSurfaceHeight;
   private MediaController mMediaController;
@@ -244,12 +242,12 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
         mOnInfoListener.onInfo(mp, what, extra);
       } else if (mMediaPlayer != null) {
         if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-        	mMediaPlayer.pause();
+          mMediaPlayer.pause();
           if (mMediaBufferingIndicator != null)
             mMediaBufferingIndicator.setVisibility(View.VISIBLE);
         } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
-        	mMediaPlayer.start();
-        	if (mMediaBufferingIndicator != null)
+          mMediaPlayer.start();
+          if (mMediaBufferingIndicator != null)
             mMediaBufferingIndicator.setVisibility(View.GONE);
         }
       }
@@ -339,12 +337,17 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     mAspectRatio = aspectRatio;
   }
 
+  @SuppressWarnings("deprecation")
   private void initVideoView(Context ctx) {
     mContext = ctx;
     mVideoWidth = 0;
     mVideoHeight = 0;
     getHolder().setFormat(PixelFormat.RGBA_8888); // PixelFormat.RGB_565
     getHolder().addCallback(mSHCallback);
+    // this value only use Hardware decoder before Android 2.3
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB && mHardwareDecoder) {
+      getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+    }
     setFocusable(true);
     setFocusableInTouchMode(true);
     requestFocus();
@@ -363,7 +366,12 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   }
 
   public void setVideoURI(Uri uri) {
+    setVideoURI(uri, null);
+  }
+  
+  public void setVideoURI(Uri uri, Map<String, String> headers) {
     mUri = uri;
+    mHeaders = headers;
     mSeekWhenPrepared = 0;
     openVideo();
     requestLayout();
@@ -379,7 +387,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mTargetState = STATE_IDLE;
     }
   }
-
+  
   private void openVideo() {
     if (mUri == null || mSurfaceHolder == null || !Vitamio.isInitialized(mContext))
       return;
@@ -392,7 +400,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     try {
       mDuration = -1;
       mCurrentBufferPercentage = 0;
-      mMediaPlayer = new MediaPlayer(mContext, false);
+      mMediaPlayer = new MediaPlayer(mContext, mHardwareDecoder);
       mMediaPlayer.setOnPreparedListener(mPreparedListener);
       mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
       mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -525,11 +533,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
         }
         return true;
       } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP || keyCode == KeyEvent.KEYCODE_MEDIA_PAUSE) {
-      	if (mMediaPlayer.isPlaying()) {
+        if (mMediaPlayer.isPlaying()) {
           pause();
           mMediaController.show();
-      	}
-      	return true;
+        }
+        return true;
       } else {
         toggleMediaControlsVisiblity();
       }
@@ -642,21 +650,17 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     mVideoChroma = chroma;
   }
   
-  /**
-   * set AVOptions
-   * @param headers
-   */
-  public void setVideoHeaders(Map<String, String> headers) {
-  	mHeaders = headers;
+  public void setHardwareDecoder(boolean hardware) {
+    mHardwareDecoder= hardware;
   }
-
+  
   public void setVideoQuality(int quality) {
     if (mMediaPlayer != null)
       mMediaPlayer.setVideoQuality(quality);
   }
   
   public void setBufferSize(int bufSize) {
-  	mBufSize = bufSize;
+    mBufSize = bufSize;
   }
 
   public boolean isBuffering() {

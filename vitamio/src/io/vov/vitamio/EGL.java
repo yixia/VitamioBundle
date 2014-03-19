@@ -24,7 +24,7 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import android.util.Log;
-import android.view.SurfaceHolder;
+import android.view.Surface;
 
 
 /**
@@ -46,9 +46,9 @@ public class EGL {
     mEGLWindowSurfaceFactory = new EGLWindowSurfaceFactory();
   }
 
-  public boolean initialize(SurfaceHolder holder) {
+  public boolean initialize(Surface surface) {
     start();
-    return createSurface(holder) != null;
+    return createSurface(surface) != null;
   }
 
   public void release() {
@@ -79,7 +79,7 @@ public class EGL {
     mEglSurface = null;
   }
 
-  public GL createSurface(SurfaceHolder holder) {
+  public GL createSurface(Surface surface) {
     if (mEgl == null)
       throw new RuntimeException("egl not initialized");
     if (mEglDisplay == null)
@@ -92,7 +92,7 @@ public class EGL {
       mEGLWindowSurfaceFactory.destroySurface(mEgl, mEglDisplay, mEglSurface);
     }
 
-    mEglSurface = mEGLWindowSurfaceFactory.createWindowSurface(mEgl, mEglDisplay, mEglConfig, holder);
+    mEglSurface = mEGLWindowSurfaceFactory.createWindowSurface(mEgl, mEglDisplay, mEglConfig, surface);
 
     if (mEglSurface == null || mEglSurface == EGL10.EGL_NO_SURFACE) {
       int error = mEgl.eglGetError();

@@ -72,7 +72,7 @@ public class MediaPlayer {
   public static final int MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = 200;
   
   /** File or network related operation errors. */
-  public static final int MEDIA_ERROR_IO = -1004;
+  public static final int MEDIA_ERROR_IO = -5;
   /** Bitstream is not conforming to the related coding standard or file spec. */
   public static final int MEDIA_ERROR_MALFORMED = -1007;
   /** Bitstream is conforming to the related coding standard or file spec, but
@@ -748,7 +748,20 @@ public class MediaPlayer {
       mFD = null;
     }
   }
+  
+  /**
+   * Sets the player to be looping or non-looping.
+   *
+   * @param looping whether to loop or not
+   */
+  public native void setLooping(boolean looping);
 
+  /**
+   * Checks whether the MediaPlayer is looping or non-looping.
+   *
+   * @return true if the MediaPlayer is currently looping, false otherwise
+   */
+  public native boolean isLooping();
   /**
    * Amplify audio
    *
@@ -1209,8 +1222,7 @@ public class MediaPlayer {
   }
 
   private void audioTrackWrite(byte[] audioData, int offsetInBytes, int sizeInBytes) {
-    if (mAudioTrack != null) {
-      audioTrackStart();
+    if (mAudioTrack != null && mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
       int written;
       while (sizeInBytes > 0) {
         written = sizeInBytes > mAudioTrackBufferSize ? mAudioTrackBufferSize : sizeInBytes;
