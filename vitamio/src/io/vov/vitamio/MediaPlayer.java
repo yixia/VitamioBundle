@@ -1113,7 +1113,7 @@ public class MediaPlayer {
   public native void setDeinterlace(boolean deinterlace);
 
   /**
-   * The buffer to fill before playback, default is 1024KB
+   * The buffer to fill before playback, default is 1024*1024 Byte 
    *
    * @param bufSize buffer size in Byte
    */
