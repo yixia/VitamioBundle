@@ -80,11 +80,10 @@ public class MediaPlayerDemo_setSurface extends Activity implements OnBufferingU
 			mMediaPlayer = new MediaPlayer(this);
 			mMediaPlayer.setDataSource(path);
 			mMediaPlayer.setSurface(new Surface(surfaceTexture));
-			mMediaPlayer.prepare();
+			mMediaPlayer.prepareAsync();
 			mMediaPlayer.setOnBufferingUpdateListener(this);
 			mMediaPlayer.setOnCompletionListener(this);
 			mMediaPlayer.setOnPreparedListener(this);
-			mMediaPlayer.getMetadata();
 			setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		} catch (Exception e) {
