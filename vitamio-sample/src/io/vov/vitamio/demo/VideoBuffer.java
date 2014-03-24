@@ -89,9 +89,11 @@ public class VideoBuffer extends Activity implements OnInfoListener, OnBuffering
 				mVideoView.pause();
 				isStart = true;
 				pb.setVisibility(View.VISIBLE);
+				downloadRateView.setText("");
+				loadRateView.setText("");
 				downloadRateView.setVisibility(View.VISIBLE);
 				loadRateView.setVisibility(View.VISIBLE);
-
+				
 			}
 			break;
 		case MediaPlayer.MEDIA_INFO_BUFFERING_END:
