@@ -25,7 +25,6 @@ import android.widget.Toast;
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.MediaPlayer.OnTimedTextListener;
-import io.vov.vitamio.widget.MediaController;
 import io.vov.vitamio.widget.VideoView;
 
 public class VideoViewSubtitle extends Activity {
@@ -57,7 +56,7 @@ public class VideoViewSubtitle extends Activity {
 			 */
 			mVideoView.setVideoPath(path);
 
-			mVideoView.setMediaController(new MediaController(this));
+			// mVideoView.setMediaController(new MediaController(this));
 			mVideoView.requestFocus();
 
 			mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

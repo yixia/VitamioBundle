@@ -19,6 +19,7 @@ package io.vov.vitamio.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import io.vov.vitamio.LibsChecker;
@@ -42,7 +43,6 @@ public class VideoViewDemo extends Activity {
 			return;
 		setContentView(R.layout.videoview);
 		mVideoView = (VideoView) findViewById(R.id.surface_view);
-
 		if (path == "") {
 			// Tell the user to provide a media file URL/path.
 			Toast.makeText(VideoViewDemo.this, "Please edit VideoViewDemo Activity, and set path" + " variable to your media file URL/path", Toast.LENGTH_LONG).show();
@@ -65,5 +65,14 @@ public class VideoViewDemo extends Activity {
 			});
 		}
 
+	}
+	
+	public void openVideo(View View) {
+	  mVideoView.setVideoPath(path);
+	}
+	
+	
+	public void openVideo2(View view) {
+	  mVideoView.setVideoPath(path);
 	}
 }

@@ -91,7 +91,7 @@ public class MediaController extends FrameLayout {
   private long mDuration;
   private boolean mShowing;
   private boolean mDragging;
-  private boolean mInstantSeeking = true;
+  private boolean mInstantSeeking = false;
   private boolean mFromXml = false;
   private ImageButton mPauseButton;
   private AudioManager mAM;

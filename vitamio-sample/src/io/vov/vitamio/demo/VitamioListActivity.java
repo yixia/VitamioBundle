@@ -48,7 +48,7 @@ public class VitamioListActivity extends ListActivity {
 		addItem(myData, "VideoView", new Intent(this, VideoViewDemo.class));
 		addItem(myData, "MediaMetadata", new Intent(this, MediaMetadataRetrieverDemo.class));
 		addItem(myData, "VideoSubtitle", new Intent(this, VideoSubtitleList.class));
-		addItem(myData, "VideoBuffer", new Intent(this, VideoBuffer.class));
+		addItem(myData, "VideoViewBuffer", new Intent(this, VideoViewBuffer.class));
 		return myData;
 	}
 

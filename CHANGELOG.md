@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+version
+---------------------------
+
+ * Compile `FFmpeg` with `librtmp`, you don't need set many rtmp AVOptions.
+ * `VideoView` support `AVOptions`.
+ * Improve seek operation.
+ * Fixed `MediaPlayer` release slowly bug.
+
 version 4.2.1 *(2014-2-25)*
 ---------------------------
 

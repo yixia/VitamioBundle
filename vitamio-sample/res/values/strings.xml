@@ -14,5 +14,7 @@
     <string name="title_activity_media_player_subtitle">MediaPlayerSubtitle</string>
     <string name="title_activity_video_view_subtitle">VideoViewSubtitle</string>
     <string name="title_activity_video_subtitle_list">VideoSubtitleList</string>
-    <string name="title_activity_video_buffer">VideoBuffer</string>
+    <string name="title_activity_video_buffer">VideoViewBuffer</string>
+    <string name="openvideo1">Open Video1</string>
+    <string name="openvideo2">Open Video2</string>
 </resources>

@@ -75,7 +75,7 @@
             android:label="@string/title_activity_video_subtitle_list" >
         </activity>
         <activity
-            android:name=".VideoBuffer"
+            android:name=".VideoViewBuffer"
             android:label="@string/title_activity_video_buffer" >
         </activity>
     </application>
