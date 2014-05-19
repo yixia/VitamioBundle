@@ -19,7 +19,9 @@ package io.vov.vitamio.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import io.vov.vitamio.LibsChecker;
@@ -35,6 +37,7 @@ public class VideoViewDemo extends Activity {
 	 */
 	private String path = "";
 	private VideoView mVideoView;
+	private EditText mEditText;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -42,6 +45,7 @@ public class VideoViewDemo extends Activity {
 		if (!LibsChecker.checkVitamioLibs(this))
 			return;
 		setContentView(R.layout.videoview);
+		mEditText = (EditText) findViewById(R.id.url);
 		mVideoView = (VideoView) findViewById(R.id.surface_view);
 		if (path == "") {
 			// Tell the user to provide a media file URL/path.
@@ -67,12 +71,16 @@ public class VideoViewDemo extends Activity {
 
 	}
 	
+	public void startPlay(View view) {
+	    String url = mEditText.getText().toString();
+	    path = url;
+	    if (!TextUtils.isEmpty(url)) {
+	        mVideoView.setVideoPath(url);
+	    }
+    }
+	
 	public void openVideo(View View) {
 	  mVideoView.setVideoPath(path);
 	}
 	
-	
-	public void openVideo2(View view) {
-	  mVideoView.setVideoPath(path);
-	}
 }
