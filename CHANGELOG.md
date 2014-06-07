@@ -1,12 +1,17 @@
 Change Log
 ==========
 
+next version
+---------------------------
+
+ * Fix many crash & anr bug
+
 version 4.2.2 *(2014-4-4)*
 ---------------------------
 
  * `VideoView` support `AVOptions`.
  * Improve seek operation.
- * Fixed `MediaPlayer` release slowly bug.
+ * Fix `MediaPlayer` release slowly bug.
 
 version 4.2.1 *(2014-2-25)*
 ---------------------------
@@ -14,7 +19,7 @@ version 4.2.1 *(2014-2-25)*
  * Support `setSurface`, you can use `SurfaceTexture` or `TextureView` render video.
  * More `MediaMetadataRetriever` API, e.g. `getEmbeddedPicture`, more metadata support.
  * Support with the cover of MP3 playback.
- * Fixed HLS multiple requests issue.
+ * Fix HLS multiple requests issue.
  * Support gradle build project.
 
 version 4.2.0 *(2013-12-31)*
@@ -26,16 +31,16 @@ version 4.2.0 *(2013-12-31)*
  * Support HTTP Live Streaming download while playing.
  * Support AES-128 encrypt for HTTP Live Streaming.
  * Improve seek operation.
- * Fixed many bugs.
+ * Fix many bugs.
 
 
 version 4.1.1 *(2013-09-16)*
 ---------------------------
 
- * improve hls playback.
- * videoview support avoptions.
- * support videoview switching rgb\_565 or rgba\_8888 to video rendering.
- * fix other bug.
+ * Improve hls playback.
+ * Videoview support avoptions.
+ * Support videoview switching rgb\_565 or rgba\_8888 to video rendering.
+ * Fix other bug.
 
 Version 4.1.0 *(2013-08-30)*
 ---------------------------
