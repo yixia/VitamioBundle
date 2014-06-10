@@ -3,14 +3,6 @@ Vitamio
 
 Vitamio is an open multimedia framework for Android and iOS, with full and real hardware accelerated decoder and renderer.
 
-Upgrade from 3.0
-----------------
-
-You don't need to change anything once 4.x is finally released. But if you want to use it right now, warnnings below:
-
-1. Vitamio support RGBA\_8888 and RGB\_565 surface to render video, use RGBA\_8888 as default. if you use the VideoView from Vitamio, you can use `setVideoChroma(MediaPlayer.VIDEOCHROMA_RGB565)` to render video. Otherwise, you must add `getHolder().setFormat(PixelFormat.RGBA_8888)` to your own VideoView.
-
-2. The dist folder include arm_x86, arm_x86_mips, online_arm, you can select difference arch copy to Vitamio.
 
 New features
 ------------
