@@ -98,6 +98,9 @@ public class CPU {
 				}
 				
 				val = cpuinfo.get("Processor");
+				if (TextUtils.isEmpty(val)) {
+				    val = cpuinfo.get("model name");
+				}
 				if (val != null && (val.contains("(v7l)") || val.contains("ARMv7"))) {
 					hasARMv6 = true;
 					hasARMv7 = true;
