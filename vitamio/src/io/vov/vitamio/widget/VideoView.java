@@ -27,7 +27,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -49,6 +49,7 @@ import io.vov.vitamio.MediaPlayer.OnVideoSizeChangedListener;
 import io.vov.vitamio.MediaPlayer.TrackInfo;
 import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.utils.Log;
+import io.vov.vitamio.utils.ScreenResolution;
 
 import java.io.IOException;
 import java.util.List;
@@ -313,8 +314,8 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
    */
   public void setVideoLayout(int layout, float aspectRatio) {
     LayoutParams lp = getLayoutParams();
-    DisplayMetrics disp = mContext.getResources().getDisplayMetrics();
-    int windowWidth = disp.widthPixels, windowHeight = disp.heightPixels;
+    Pair<Integer, Integer> res = ScreenResolution.getResolution(mContext);
+    int windowWidth = res.first.intValue(), windowHeight = res.second.intValue();
     float windowRatio = windowWidth / (float) windowHeight;
     float videoRatio = aspectRatio <= 0.01f ? mVideoAspectRatio : aspectRatio;
     mSurfaceHeight = mVideoHeight;
