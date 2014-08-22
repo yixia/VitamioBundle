@@ -43,7 +43,8 @@ public class MediaPlayerDemo_setSurface extends Activity implements OnBufferingU
   private MediaPlayer mMediaPlayer;
   private TextureView mTextureView;
   private String path;
-
+  private Surface surf;
+  
   private boolean mIsVideoSizeKnown = false;
   private boolean mIsVideoReadyToBePlayed = false;
 
@@ -80,7 +81,8 @@ public class MediaPlayerDemo_setSurface extends Activity implements OnBufferingU
       // Create a new media player and set the listeners
       mMediaPlayer = new MediaPlayer(this, true);
       mMediaPlayer.setDataSource(path);
-      mMediaPlayer.setSurface(new Surface(surfaceTexture));
+      if (surf==null) {surf=new Surface (surfaceTexture);}
+      mMediaPlayer.setSurface(surf);
       mMediaPlayer.prepareAsync();
       mMediaPlayer.setOnBufferingUpdateListener(this);
       mMediaPlayer.setOnCompletionListener(this);
