@@ -1251,6 +1251,10 @@ public class MediaPlayer {
     }
     mAudioTrack = null;
   }
+  
+  public int getAudioSessionId() {
+	return mAudioTrack.getAudioSessionId();
+  }
 
   private ByteBuffer surfaceInit() {
     synchronized (this) {
