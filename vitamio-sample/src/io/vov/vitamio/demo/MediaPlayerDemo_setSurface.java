@@ -81,7 +81,9 @@ public class MediaPlayerDemo_setSurface extends Activity implements OnBufferingU
       // Create a new media player and set the listeners
       mMediaPlayer = new MediaPlayer(this, true);
       mMediaPlayer.setDataSource(path);
-      if (surf==null) {surf=new Surface (surfaceTexture);}
+      if (surf == null) {
+          surf = new Surface (surfaceTexture);
+      }
       mMediaPlayer.setSurface(surf);
       mMediaPlayer.prepareAsync();
       mMediaPlayer.setOnBufferingUpdateListener(this);
