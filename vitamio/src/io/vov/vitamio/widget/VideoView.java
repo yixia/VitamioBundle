@@ -70,6 +70,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
   public static final int VIDEO_LAYOUT_SCALE = 1;
   public static final int VIDEO_LAYOUT_STRETCH = 2;
   public static final int VIDEO_LAYOUT_ZOOM = 3;
+  public static final int VIDEO_LAYOUT_FIT_PARENT = 4;
   private static final int STATE_ERROR = -1;
   private static final int STATE_IDLE = 0;
   private static final int STATE_PREPARING = 1;
@@ -309,6 +310,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
    *                    <li>{@link #VIDEO_LAYOUT_SCALE}
    *                    <li>{@link #VIDEO_LAYOUT_STRETCH}
    *                    <li>{@link #VIDEO_LAYOUT_ZOOM}
+   *                    <li>{@link #VIDEO_LAYOUT_FIT_PARENT}
    *                    </ul>
    * @param aspectRatio video aspect ratio, will audo detect if 0.
    */
@@ -326,6 +328,9 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
     } else if (layout == VIDEO_LAYOUT_ZOOM) {
       lp.width = windowRatio > videoRatio ? windowWidth : (int) (videoRatio * windowHeight);
       lp.height = windowRatio < videoRatio ? windowHeight : (int) (windowWidth / videoRatio);
+    } else if (layout == VIDEO_LAYOUT_FIT_PARENT) {
+      lp.width = LayoutParams.MATCH_PARENT;
+      lp.height = LayoutParams.WRAP_CONTENT;
     } else {
       boolean full = layout == VIDEO_LAYOUT_STRETCH;
       lp.width = (full || windowRatio < videoRatio) ? windowWidth : (int) (videoRatio * windowHeight);
