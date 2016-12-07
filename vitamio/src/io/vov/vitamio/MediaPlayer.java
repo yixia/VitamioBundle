@@ -434,6 +434,12 @@ public class MediaPlayer {
   public void setDataSegments(String[] uris, String cacheDir) {
   	_setDataSegmentsSource(uris, cacheDir);
   }
+  
+  
+  private void onHWRenderFailed() {
+     if (mOnHWRenderFailedListener != null)
+         mOnHWRenderFailedListener.onFailed();
+  }
 
   public void setOnHWRenderFailedListener(OnHWRenderFailedListener l) {
     mOnHWRenderFailedListener = l;
