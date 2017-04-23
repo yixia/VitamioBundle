@@ -84,7 +84,7 @@ public class MediaPlayerDemo_Audio extends Activity {
 			}
 			tx.setText("Playing audio...");
 
-		} catch (Exception e) {
+		}catch (Exception e) {
 			Log.e(TAG, "error: " + e.getMessage(), e);
 		}
 
@@ -98,13 +98,7 @@ public class MediaPlayerDemo_Audio extends Activity {
 			afd.close();
 			mp.prepare();
 			return mp;
-		} catch (IOException ex) {
-			Log.d(TAG, "create failed:", ex);
-			// fall through
-		} catch (IllegalArgumentException ex) {
-			Log.d(TAG, "create failed:", ex);
-			// fall through
-		} catch (SecurityException ex) {
+		}catch(IOException | IllegalArgumentException | SecurityException  ex) /*multi-catch refactor*/ {
 			Log.d(TAG, "create failed:", ex);
 			// fall through
 		}

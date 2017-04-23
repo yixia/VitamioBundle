@@ -426,13 +426,7 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
       mMediaPlayer.prepareAsync();
       mCurrentState = STATE_PREPARING;
       attachMediaController();
-    } catch (IOException ex) {
-      Log.e("Unable to open content: " + mUri, ex);
-      mCurrentState = STATE_ERROR;
-      mTargetState = STATE_ERROR;
-      mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
-      return;
-    } catch (IllegalArgumentException ex) {
+    }catch(IOException | IllegalArgumentException  ex) /*multi-catch refactor*/ {
       Log.e("Unable to open content: " + mUri, ex);
       mCurrentState = STATE_ERROR;
       mTargetState = STATE_ERROR;

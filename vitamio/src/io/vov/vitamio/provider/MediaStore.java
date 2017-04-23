@@ -210,11 +210,7 @@ public final class MediaStore {
         ParcelFileDescriptor pfdInput = cr.openFileDescriptor(thumbUri, "r");
         bitmap = BitmapFactory.decodeFileDescriptor(pfdInput.getFileDescriptor(), null, options);
         pfdInput.close();
-      } catch (FileNotFoundException ex) {
-        Log.e("getMiniThumbFromFile", ex);
-      } catch (IOException ex) {
-        Log.e("getMiniThumbFromFile", ex);
-      } catch (OutOfMemoryError ex) {
+      }catch(FileNotFoundException | IOException | OutOfMemoryError  ex) /*multi-catch refactor*/ {
         Log.e("getMiniThumbFromFile", ex);
       }
       return bitmap;

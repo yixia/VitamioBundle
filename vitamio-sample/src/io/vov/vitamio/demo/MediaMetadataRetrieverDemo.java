@@ -39,11 +39,7 @@ public class MediaMetadataRetrieverDemo extends Activity {
 				return;
 			}
 			retriever.setDataSource(path);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		}catch(IllegalArgumentException | IllegalStateException | IOException  e) /*multi-catch refactor*/ {
 			e.printStackTrace();
 		}
 		long durationMs = Long.parseLong(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
